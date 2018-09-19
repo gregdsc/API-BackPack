@@ -1,0 +1,48 @@
+FORMAT: 1A
+HOST: https://backpack-api-epitech.herokuapp.com/
+
+# BackPack-Api
+
+BackpackTechnologies RESTful API with Flask & SQLAlchemy
+
+## Uers Collection [/users]
+
+### List All Users [GET]
+
++ Response 200 (application/json)
+
+        [
+            {
+                "id": 1,
+                "username": "test",
+                "password_hash": "$6$rounds=656000$49uce7xoZYfrpWYW$lcgAVAaxzEzpccbpqOm0ECliPNXIBUiSLpADYV6FCJd9eI3eFwDxNapLBZ5DkzzdNCUZk68ixrkh2FTQyXQbW0",
+                "uri": "http://localhost:5000/users/1"
+            },
+            {
+                "id": 2,
+                "username": "lol",
+                "password_hash": "$6$rounds=656000$LDh72B2mjqJvE/FG$wNQW0xsfGnP06RZU6j96NIluDOLcuFVyJpvNA7gfclSb4TXqKlIO5BmWJhXw28q.nIRuOE7M7J05PAlQNWzJH0",
+                "uri": "http://localhost:5000/users/2"
+            }
+        ]
+
+### Create a New User [POST]
+
+You may create a new user using this action. It takes a JSON
+object containing the username and password of the user.
+
++ Request (application/json)
+
+        {
+            "username": "coucou",
+            "password": "coucou"
+        }
+
++ Response 201 (application/json)
+
+        {
+            "id": 3,
+            "username": "coucou",
+            "password_hash": "$6$rounds=656000$JCVaCn1mJy.qqc3S$e/8Ye8bWjD9Ha/UAjgWvHFAF10pFjKAz7VZPzZG5gmeX/9lkch6e.PTQn7YqrtiS.PoMpEeB6bQFsWFNAhmfN.",
+            "uri": "http://localhost:5000/users/3"
+        }
