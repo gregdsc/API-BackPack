@@ -160,9 +160,9 @@ class InterestPointListRessource(Resource):
     def get(self):
         pois = session.query(InterestPoint).all()
         for poi in pois:
-            print(poi.imageUrls)
+            # print(poi.imageUrls)
             poi.imageUrls = session.query(ImageUrls).filter(ImageUrls.poiName == poi.name).all()
-            print(poi.imageUrls)
+            # print(poi.imageUrls)
         return pois
 
     @authToken.login_required

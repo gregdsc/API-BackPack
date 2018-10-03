@@ -10,6 +10,7 @@ from flask_cors import CORS
 
 
 app = Flask(__name__)
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 CORS(app)
 app.config['SQLALCHEMY_DATABASE_URI'] = DB_URI
 app.config['SECRET_KEY'] = "I7QkQImQ6468QJkKQJ434QHJHFLSssjd"
@@ -68,6 +69,19 @@ class InterestPoint(db.Model):
     type = db.Column(db.String(255))
     imageUrls = []
 
+
+class Activity(db.Model):
+    _tablename__ = 'activity'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(255))
+    start_time = db.Column(db.String(255))
+    end_time = db.Column(db.String(255))
+    count = db.Column(db.Integer)
+    distance = db.Column(db.Float)
+    calorie = db.Column(db.Float)
+    speed = db.Column(db.Float)
+    type = db.Column(db.String(255))
+    username = db.Column(db.String(255))
 
 if __name__ == '__main__':
     manager.run()
