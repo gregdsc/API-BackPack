@@ -1,15 +1,12 @@
 from flask import g
-
-from manage import Activity, User
 from db import session
-
 from flask_restful import reqparse
 from flask_restful import abort
 from flask_restful import Resource
 from flask_restful import fields
 from flask_restful import marshal_with
-
 from flask_httpauth import HTTPBasicAuth, HTTPTokenAuth
+from manage import Activity, User
 
 activity_field = {
     'id': fields.Integer,
@@ -21,6 +18,21 @@ activity_field = {
     'calorie': fields.Float,
     'speed': fields.Float,
     'type': fields.String,
+    'uri': fields.Url('activity', absolute=True),
+}
+
+calorie_field = {
+    'id': fields.Integer,
+    'calorie': fields.Float,
+    'start_time': fields.DateTime,
+    'uri': fields.Url('calorie', absolute=True),
+}
+
+speed_field = {
+    'id': fields.Integer,
+    'speed': fields.Float,
+    'start_time': fields.DateTime,
+    'uri': fields.Url('speed', absolute=True),
 }
 
 authBasic = HTTPBasicAuth()
@@ -39,9 +51,12 @@ class ActivityResource(Resource):
     parser.add_argument('type', type=str)
 
     @marshal_with(activity_field)
+    @authBasic.login_required
     def get(self):
         activities = session.query(Activity).all()
-        return activities, 201, {'Access-Control-Allow-Origin': '*'}
+        if not activities:
+            abort(404, message="Please enter an activity before")
+        return activities, 200, {'Access-Control-Allow-Origin': '*'}
 
     @authToken.login_required
     @marshal_with(activity_field)
@@ -64,13 +79,60 @@ class ActivityResource(Resource):
                             username=g.user.username)
         session.add(activity)
         session.commit()
-        return activity, 201, {'Access-Control-Allow-Origin': '*'}
+        return activity, 200, {'Access-Control-Allow-Origin': '*'}
 
 
-    @authToken.verify_token
-    def verify_token(token):
-        user = User.verify_auth_token(token)
-        if user is None:
-            return False
-        g.user = user
-        return True
+class ActivityCalorie(Resource):
+
+    @authToken.login_required
+    @marshal_with(calorie_field)
+    def get(self):
+        calorie_date = session.query(Activity).all()
+        if not calorie_date:
+            abort(404, message="Please enter an activity with calorie before")
+        return calorie_date
+
+    @authToken.login_required
+    @marshal_with(calorie_field)
+    def post(self):
+        parsed_args = self.parser.parse_args()
+        calorie = parsed_args['calorie']
+        start_time = parsed_args['start_time']
+        if start_time is None or calorie is None:
+            abort(400, message="Missing arguments")
+        activity = Activity(calorie=calorie,start_time=start_time, username=g.user.username)
+        session.add(activity)
+        session.commit()
+        return activity, 200, {'Access-Control-Allow-Origin': '*'}
+
+class ActivitySpeed(Resource):
+
+    @authToken.login_required
+    @marshal_with(speed_field)
+    def get(self):
+        speed_date = session.query(Activity).all()
+        if not speed_date:
+            abort(404, message="Please enter an activity with calorie before")
+        return speed_date
+
+    @authToken.login_required
+    @marshal_with(speed_field)
+    def post(self):
+        parsed_args = self.parser.parse_args()
+        speed = parsed_args['speed']
+        start_time = parsed_args['start_time']
+        if start_time is None or speed is None:
+            abort(400, message="Missing arguments")
+        activity = Activity(speed=speed, start_time=start_time, username=g.user.username)
+        session.add(activity)
+        session.commit()
+        return activity, 200, {'Access-Control-Allow-Origin': '*'}
+
+
+@authToken.verify_token
+def verify_token(token):
+    user = User.verify_auth_token(token)
+    if user is None:
+        return False
+    g.user = user
+    return True

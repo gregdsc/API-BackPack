@@ -32,6 +32,7 @@ interest_field = {
     'uri': fields.Url('poi', absolute=True),
 }
 
+
 authBasic = HTTPBasicAuth()
 authToken = HTTPTokenAuth()
 
@@ -87,6 +88,8 @@ class UserListRessource(Resource):
     @marshal_with(user_fields)
     def get(self):
         users = session.query(User).all()
+        if not users:
+            abort(404, message="Please enter an user before")
         return users
 
     @marshal_with(user_fields)
@@ -113,17 +116,19 @@ class InterestPointRessource(Resource):
     parser.add_argument('long', type=float)
     parser.add_argument('type', type=str)
 
-    @marshal_with(interest_field)
-    def get(self, id):
-        poi = session.query(InterestPoint).filter(InterestPoint.id == id).first()
-        if not poi:
-            abort(404, message="poi {} doesn't exist".format(id))
 
     @marshal_with(interest_field)
     def get(self, type):
         poi = session.query(InterestPoint).filter(InterestPoint.type == type).all()
         if not poi:
             abort(404, message="poi {} doesn't exist".format(type))
+        return poi
+
+    @marshal_with(interest_field)
+    def get(self, id):
+        poi = session.query(InterestPoint).filter(InterestPoint.id == id).first()
+        if not poi:
+            abort(404, message="poi {} doesn't exist".format(id))
         return poi
 
     @staticmethod

@@ -71,10 +71,12 @@ class InterestPoint(db.Model):
 
 
 class Activity(db.Model):
+
     _tablename__ = 'activity'
+
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(255))
-    start_time = db.Column(db.String(255))
+    start_time = db.Column(db.DateTime)
     end_time = db.Column(db.String(255))
     count = db.Column(db.Integer)
     distance = db.Column(db.Float)
@@ -82,6 +84,7 @@ class Activity(db.Model):
     speed = db.Column(db.Float)
     type = db.Column(db.String(255))
     username = db.Column(db.String(255))
+
 
 if __name__ == '__main__':
     manager.run()
