@@ -108,7 +108,7 @@ class UserListRessource(Resource):
         return user, 201
 
 
-class InterestPointRessource(Resource):
+class InterestPointfiltre(Resource):
     parser = reqparse.RequestParser()
     parser.add_argument('name', type=str)
     parser.add_argument('description', type=str)
@@ -123,6 +123,18 @@ class InterestPointRessource(Resource):
         if not poi:
             abort(404, message="poi {} doesn't exist".format(type))
         return poi
+
+
+class InterestPointRessource(Resource):
+    parser = reqparse.RequestParser()
+    parser.add_argument('name', type=str)
+    parser.add_argument('description', type=str)
+    parser.add_argument('lat', type=float)
+    parser.add_argument('long', type=float)
+    parser.add_argument('type', type=str)
+
+
+# A bouger ça fait bug le "type" juste en haut #
 
     @marshal_with(interest_field)
     def get(self, id):

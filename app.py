@@ -2,7 +2,8 @@
 
 from flask import Flask
 from flask_restful import Api
-from resources import UserListRessource, UserResource, InterestPointListRessource, InterestPointRessource, GetToken
+from resources import UserListRessource, UserResource, InterestPointListRessource, InterestPointRessource, GetToken, \
+    InterestPointfiltre
 from activity import *
 from flask_cors import CORS
 
@@ -18,7 +19,7 @@ api.add_resource(UserResource, '/user/<string:id>', endpoint='user')
 # Poi #
 api.add_resource(InterestPointListRessource, '/pois', '/pois/', endpoint='pois')
 api.add_resource(InterestPointRessource, '/poi/<string:id>', endpoint='poi')
-api.add_resource(InterestPointRessource, '/filter/<string:type>', endpoint= 'filter')
+api.add_resource(InterestPointfiltre, '/filter/<string:type>', endpoint='filter')
 
 # Token #
 api.add_resource(GetToken, '/token', endpoint='token')

@@ -86,8 +86,9 @@ class ActivityResource(Resource):
     parser.add_argument('speed', type=float)
     parser.add_argument('type', type=str)
 
+
+    @authToken.login_required
     @marshal_with(activity_field)
-    @authBasic.login_required
     def get(self):
         activities = session.query(Activity).all()
         if not activities:
