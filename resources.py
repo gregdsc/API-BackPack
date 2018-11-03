@@ -201,7 +201,7 @@ class InterestPointListRessource(Resource):
         poi.imageUrls = []
         images = request.files.getlist('images')
         for image in images:
-            oader.uploadcloudinary_struct = upl(image, public_id='{0}_{1}_{2}'.format(g.user.username, name,
+            cloudinary_struct = uploader.upload(image, public_id='{0}_{1}_{2}'.format(g.user.username, name,
                                                                                       image.filename))
             print(cloudinary_struct)
             url = ImageUrls(url=cloudinary_struct['url'], poiName=name)
