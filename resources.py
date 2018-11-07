@@ -119,10 +119,12 @@ class InterestPointfiltre(Resource):
 
     @marshal_with(interest_field)
     def get(self, type):
-        poi = session.query(InterestPoint).filter(InterestPoint.type == type).all()
-        if not poi:
+        pois = session.query(InterestPoint).filter(InterestPoint.type == type).all()
+        if not pois:
             abort(404, message="poi {} doesn't exist".format(type))
-        return poi
+        for poi in pois:
+            poi.imageUrls = session.query(ImageUrls).filter(ImageUrls.poiName == poi.name).all()
+        return pois
 
 
 class InterestPointRessource(Resource):
@@ -134,13 +136,12 @@ class InterestPointRessource(Resource):
     parser.add_argument('type', type=str)
 
 
-# A bouger ça fait bug le "type" juste en haut #
-
     @marshal_with(interest_field)
     def get(self, id):
         poi = session.query(InterestPoint).filter(InterestPoint.id == id).first()
         if not poi:
             abort(404, message="poi {} doesn't exist".format(id))
+        poi.imageUrls = session.query(ImageUrls).filter(ImageUrls.poiName == poi.name).all()
         return poi
 
     @staticmethod
@@ -151,6 +152,8 @@ class InterestPointRessource(Resource):
         session.delete(poi)
         session.commit()
         return {}, 204
+
+    # Il faudra enlever l'url de l'image aussi dans la fonctione du haut
 
     @marshal_with(interest_field)
     def put(self, id):
@@ -177,9 +180,7 @@ class InterestPointListRessource(Resource):
     def get(self):
         pois = session.query(InterestPoint).all()
         for poi in pois:
-            # print(poi.imageUrls)
             poi.imageUrls = session.query(ImageUrls).filter(ImageUrls.poiName == poi.name).all()
-            # print(poi.imageUrls)
         return pois
 
     @authToken.login_required
