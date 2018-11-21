@@ -63,6 +63,7 @@ class UserResource(Resource):
     @marshal_with(user_fields)
     def put(self, id):
         parsed_args = self.parser.parse_args()
+        print(parsed_args)
         user = session.query(User).filter(User.id == id).first()
         if user.id != g.user.id:
             abort(403, message="user {0} is not allowed to modify user {1}".format(id, g.user.id))
@@ -75,10 +76,11 @@ class UserResource(Resource):
                     password_reset['new_password_confirm']:
                 abort(400, message="wrong old_password or new_password and new_password_confirm mismatch")
             user.hash_password(password_reset['new_password'])
+        else:
+            abort(403, message="password has not change")
         session.add(user)
         session.commit()
         return user, 201
-
 
 class UserListRessource(Resource):
     parser = reqparse.RequestParser()
