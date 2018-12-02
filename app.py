@@ -1,11 +1,11 @@
 #!/usr/bin/env python
 
 from flask import Flask
-from flask_restful import Api
-from resources import UserListRessource, UserResource, InterestPointListRessource, InterestPointRessource, GetToken, \
-    InterestPointfiltre
-from activity import *
 from flask_cors import CORS
+from flask_restful import Api
+from ramble import *
+from activity import *
+from resources import *
 
 app = Flask(__name__)
 api = Api(app)
@@ -51,7 +51,9 @@ api.add_resource(ActivityKmMax, '/activity/km_max', endpoint='km_max')
 api.add_resource(ActivityKmDesc, '/activity/km_desc', endpoint='km_desc')
 api.add_resource(ActivityKmMin, '/activity/km_min', endpoint='km_min')
 
+# Ramble #
 
+api.add_resource(Ramble_ressource, '/ramble', '/ramble/', endpoint='ramble')
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')

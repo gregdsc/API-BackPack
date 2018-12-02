@@ -188,6 +188,7 @@ class InterestPointListRessource(Resource):
     @authToken.login_required
     @marshal_with(interest_field)
     def post(self):
+        print(self)
         parsed_args = self.parser.parse_args()
         name = parsed_args['name']
         description = parsed_args['description']

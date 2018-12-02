@@ -86,5 +86,12 @@ class Activity(db.Model):
     username = db.Column(db.String(255))
 
 
+class Ramble(db.Model):
+
+    _tablename__ = 'ramble'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(255))
+    point = db.Column(db.Integer)
+
 if __name__ == '__main__':
     manager.run()
