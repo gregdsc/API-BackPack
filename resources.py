@@ -188,8 +188,8 @@ class InterestPointListRessource(Resource):
     @authToken.login_required
     @marshal_with(interest_field)
     def post(self):
-        print(self)
         parsed_args = self.parser.parse_args()
+        print(parsed_args)
         name = parsed_args['name']
         description = parsed_args['description']
         lat = parsed_args['lat']
@@ -235,6 +235,7 @@ def verify_password(username, password):
 @authToken.verify_token
 def verify_token(token):
     user = User.verify_auth_token(token)
+    print(token)
     if user is None:
         return False
     g.user = user

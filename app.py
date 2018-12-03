@@ -6,6 +6,7 @@ from flask_restful import Api
 from ramble import *
 from activity import *
 from resources import *
+from poi_user import *
 
 app = Flask(__name__)
 api = Api(app)
@@ -20,6 +21,11 @@ api.add_resource(UserResource, '/user/<string:id>', endpoint='user')
 api.add_resource(InterestPointListRessource, '/pois', '/pois/', endpoint='pois')
 api.add_resource(InterestPointRessource, '/poi/<string:id>', endpoint='poi')
 api.add_resource(InterestPointfiltre, '/filter/<string:type>', endpoint='filter')
+
+
+# Poi user #
+api.add_resource(User_Poi, '/pois_me', '/pois_me/', endpoint='pois_me')
+
 
 # Token #
 api.add_resource(GetToken, '/token', endpoint='token')
@@ -54,6 +60,6 @@ api.add_resource(ActivityKmMin, '/activity/km_min', endpoint='km_min')
 # Ramble #
 
 api.add_resource(Ramble_ressource, '/ramble', '/ramble/', endpoint='ramble')
-
+api.add_resource(Ramble_ressource, '/rambles/<string:id>', endpoint='rambles')
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')

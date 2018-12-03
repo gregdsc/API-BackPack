@@ -91,7 +91,8 @@ class Ramble(db.Model):
     _tablename__ = 'ramble'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(255))
-    point = db.Column(db.Integer)
+    point = db.Column(db.String(255))
+    userName = db.Column(db.String(255))
 
 if __name__ == '__main__':
     manager.run()
