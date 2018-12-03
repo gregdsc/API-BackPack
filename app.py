@@ -25,6 +25,7 @@ api.add_resource(InterestPointfiltre, '/filter/<string:type>', endpoint='filter'
 
 # Poi user #
 api.add_resource(User_Poi, '/pois_me', '/pois_me/', endpoint='pois_me')
+api.add_resource(User_Poi, '/poi_me/<string:id>', '/poi_me/<string:id>', endpoint='poi_me')
 
 
 # Token #
@@ -61,5 +62,6 @@ api.add_resource(ActivityKmMin, '/activity/km_min', endpoint='km_min')
 
 api.add_resource(Ramble_ressource, '/ramble', '/ramble/', endpoint='ramble')
 api.add_resource(Ramble_ressource, '/rambles/<string:id>', endpoint='rambles')
+
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')
