@@ -27,6 +27,8 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(255), index=True)
     password_hash = db.Column(db.String(255))
+    description = db.Column(db.String(500))
+    pic_url = db.Column(db.String(255))
 
     def hash_password(self, password):
         self.password_hash = pwd_context.encrypt(password)
@@ -67,6 +69,7 @@ class InterestPoint(db.Model):
     long = db.Column(db.Float)
     userName = db.Column(db.String(255))
     type = db.Column(db.String(255))
+    rank = db.Column(db.Integer)
     imageUrls = []
 
 
