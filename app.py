@@ -8,7 +8,6 @@ from activity import *
 from resources import *
 from poi_user import *
 
-app = Flask(__name__)
 api = Api(app)
 CORS(app)
 
@@ -59,9 +58,13 @@ api.add_resource(ActivityKmDesc, '/activity/km_desc', endpoint='km_desc')
 api.add_resource(ActivityKmMin, '/activity/km_min', endpoint='km_min')
 
 # Ramble #
+api.add_resource(Ramble_List_ressource, '/ramble', '/ramble/', endpoint='ramble')
 
-api.add_resource(Ramble_ressource, '/ramble', '/ramble/', endpoint='ramble')
-api.add_resource(Ramble_ressource, '/rambles/<string:id>', endpoint='rambles')
+# Ramble ID #
+
+api.add_resource(Ramble_ressource, '/rambl', '/rambl/', endpoint='rambl')
+api.add_resource(Ramble_ressource, '/ramble_point/<int:id>/<int:id_point>', endpoint='ramble_point')
+api.add_resource(Ramble_ressource, '/rambles/<int:id>', endpoint='rambles')
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')

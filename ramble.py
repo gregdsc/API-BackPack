@@ -8,13 +8,37 @@ from flask_restful import Resource
 from flask_restful import fields, marshal
 from flask_restful import marshal_with
 from flask_httpauth import HTTPBasicAuth, HTTPTokenAuth
-from manage import Activity, User, Ramble, ImageUrls, InterestPoint
-from resources import InterestPointRessource
+from manage import *
+from resources import InterestPointRessource, InterestPointListRessource
+import datetime
 
-ramble_fields = {
+point = {
+        'id': fields.Integer,
+        'name': fields.String,
+        'description': fields.String,
+        'lat': fields.Float,
+        'long': fields.Float,
+        'userName': fields.String,
+        'type': fields.String,
+        'imageUrls': fields.List(fields.String(attribute='url')),
+    }
+
+ramble = {
     'id': fields.Integer,
     'name': fields.String,
-    'point': fields.String,
+    'point':fields.Nested(point),
+    'uri': fields.Url('rambles', absolute=True),
+}
+
+
+ramble_all = {
+    'id': fields.Integer,
+    'name': fields.String,
+    'date': fields.DateTime(attribute='date_ramble'),
+    'difficulty': fields.Integer,
+    'travel time': fields.Float(attribute='travel_time'),
+    'step number': fields.Float(attribute='step_number'),
+    'imageUrls': fields.List(fields.String(attribute='url')),
     'uri': fields.Url('rambles', absolute=True),
 }
 
@@ -26,65 +50,77 @@ class Ramble_ressource(Resource):
     parser.add_argument('name', type=str)
     parser.add_argument('point', type=dict)
 
+
+    @marshal_with(ramble)
+    def get(self, id):
+        rando = session.query(Ramble).filter(Ramble.id == id).first()
+        rando_details = session.query(Ramble_details.point).filter(Ramble_details.id_ramble == id).order_by(Ramble_details.ordre).all()
+        len_rand = len(rando_details)
+        i = 0
+        points = []
+        while i < len_rand:
+            p = InterestPointRessource.get(self, rando_details[i])
+            points.append(p)
+            i += 1
+        rando.point = points
+        return rando
+
+    def delete(self, id, id_point):
+        rando = session.query(Ramble).filter(Ramble.id == id).first()
+        rando_details = session.query(Ramble_details.point).filter(Ramble_details.point == id_point).delete()
+        session.commit()
+        return {}, 204
+
+
+
+class Ramble_List_ressource(Resource):
+    parser = reqparse.RequestParser()
+    parser.add_argument('name', type=str)
+    parser.add_argument('point', type=dict)
+    parser.add_argument('difficulty', type=int)
+    parser.add_argument('travel time', type=float)
+
     @authToken.login_required
+    @marshal_with(ramble_all)
     def post(self):
         parsed_args = self.parser.parse_args()
         name = parsed_args['name']
+        difficulty = parsed_args['difficulty']
+        travel_time = parsed_args['travel time']
         point = parsed_args['point']
 
-        x = '1'
-        rando_fields = {'name': fields.String}
-        rando_fields['Point_interet']={}
-        rando_fields['Point_interet']['name_poi' + x] = fields.String(attribute="")
+        username_ramble = session.query(Ramble).filter(Ramble.userName == g.user.username).first()
+        name_ramble = session.query(Ramble).filter(Ramble.name == name).first()
+        date_n = datetime.datetime.now()
+        step = len(point)
 
-
-        str_point = json.dumps(point)
-        print(str_point)
-        if not point:
-            abort(403, message="impossible de créer une rando si il n'existe pas de point de départ")
-        if name is None:
-            name = ", ".join(point.keys())
-        rando = Ramble(name=name, point=str_point, userName=g.user.username)
-        session.add(rando)
+        if username_ramble:
+            if name_ramble:
+                abort(404, message="Vous avez déjà une randonnée du même nom")
+        if difficulty < 0 or difficulty > 5 and type(difficulty) == int:
+            abort(404, message="la difficulté ne peux aller que de 1 à 5 et doit être un int")
+        n = Ramble(name=name, userName=g.user.username, difficulty=difficulty, travel_time=travel_time, step_number=step, date_ramble=date_n)
+        session.add(n)
+        session.commit() # à voir si on fait une relation de model plus besoin de commit. pour récupérer l'id
+        n2 = session.query(Ramble).filter(Ramble.name == name).first()
+        for k, id_point in point.items():
+            point = Ramble_details(id_ramble=n2.id, point=id_point, ordre=k)
+            session.add(point)
         session.commit()
-        return rando
+        return n, 201
 
+    @authToken.login_required
+    @marshal_with(ramble_all)
+    def get(self):
+        rambles = session.query(Ramble).filter(Ramble.userName == g.user.username).order_by(Ramble.date_ramble.desc()).all()
+        return rambles, 201
 
+    #@authToken.login_required
+    #def delete(self):
+     #   rambles = session.query(Ramble).filter(Ramble.userName == g.user.username).delete()
+      #  session.commit()
+       # return {}, 201
 
-    def get(self, id):
-        resource_fields = {'name': fields.String}
-        resource_fields['point_interet'] = {}
-        resource_fields['point_interet']['id'] = fields.Integer
-        resource_fields['point_interet']['name'] = fields.String(attribute='name')
-        resource_fields['point_interet']['description'] = fields.String
-        resource_fields['point_interet']['lat'] = fields.Float
-        resource_fields['point_interet']['long'] = fields.Float
-        resource_fields['point_interet']['type'] = fields.String
-
-        data = InterestPointRessource().get(74)
-        data1 = InterestPointRessource().get(75)
-        data2 = InterestPointRessource().get(76)
-        a = marshal(data, resource_fields)
-        b = marshal(data, resource_fields)
-        print(a)
-        return a, b
-
-
-
-
-
-
-
-        rando = session.query(Ramble).filter(Ramble.id == id).first()
-
-
-        point = session.query(Ramble.point).filter(Ramble.id == id).first()
-
-        return rando
-
-        point = session.query(InterestPoint).filter(InterestPoint.id == id_point).first()
-        point.imageUrls = session.query(ImageUrls).filter(ImageUrls.poiName == poi.name).all()
-        return "ok"
 
 @authToken.verify_token
 def verify_token(token):
@@ -93,3 +129,20 @@ def verify_token(token):
         return False
     g.user = user
     return True
+
+def dumpclean(obj):
+    if type(obj) == dict:
+        for k, v in obj.items():
+            if hasattr(v, '__iter__'):
+                print(k)
+                dumpclean(v)
+            else:
+                print('%s : %s' % (k, v))
+    elif type(obj) == list:
+        for v in obj:
+            if hasattr(v, '__iter__'):
+                dumpclean(v)
+            else:
+                print(v)
+    else:
+        print(obj)

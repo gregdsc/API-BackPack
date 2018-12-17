@@ -36,7 +36,7 @@ interest_field = {
 authBasic = HTTPBasicAuth()
 authToken = HTTPTokenAuth()
 
-class User_oi(Resource):
+class User_Poi(Resource):
     parser = reqparse.RequestParser()
     parser.add_argument('name', type=str)
     parser.add_argument('description', type=str)

@@ -91,8 +91,24 @@ class Ramble(db.Model):
     _tablename__ = 'ramble'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(255))
-    point = db.Column(db.String(255))
     userName = db.Column(db.String(255))
+    date_ramble = db.Column(db.DateTime)
+    difficulty = db.Column(db.Integer)
+    travel_time = db.Column(db.Float)
+    step_number = db.Column(db.Float)
+    ramble_d = db.relationship('Ramble_details', backref='ramble_details', lazy='dynamic')
+
+
+
+
+class Ramble_details(db.Model):
+
+    _tablename__ = 'ramble_details'
+    id = db.Column(db.Integer, primary_key=True)
+    id_ramble = db.Column(db.Integer, db.ForeignKey('ramble.id'))
+    point = db.Column(db.Integer)
+    ordre = db.Column(db.Integer)
 
 if __name__ == '__main__':
     manager.run()
+
