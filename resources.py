@@ -1,5 +1,3 @@
-import datetime
-
 from flask import g
 
 from manage import User, InterestPoint, ImageUrls
@@ -197,14 +195,12 @@ class InterestPointListRessource(Resource):
         lat = parsed_args['lat']
         long = parsed_args['long']
         type = parsed_args['type']
-        date = datetime.datetime.now()
-
         if name is None or description is None or lat is None or long is None:
             abort(400, message="Missing arguments")
         if session.query(InterestPoint).filter(InterestPoint.name == name).first() is not None:
             abort(400, message="Poi {} already exists".format(name))
         poi = InterestPoint(name=name, description=description, lat=lat,
-                            long=long, type=type, userName=g.user.username, date=date)
+                            long=long, type=type, userName=g.user.username)
         session.add(poi)
         poi.imageUrls = []
         images = request.files.getlist('images')
