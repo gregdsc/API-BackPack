@@ -20,6 +20,8 @@ point = {
         'long': fields.Float,
         'userName': fields.String,
         'type': fields.String,
+        'date': fields.DateTime,
+        'rank': fields.Integer,
         'imageUrls': fields.List(fields.String(attribute='url')),
     }
 

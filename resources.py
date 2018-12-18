@@ -1,5 +1,5 @@
 from flask import g
-
+import datetime
 from manage import User, InterestPoint, ImageUrls
 from db import session
 
@@ -150,6 +150,7 @@ class InterestPointRessource(Resource):
     parser.add_argument('lat', type=float)
     parser.add_argument('long', type=float)
     parser.add_argument('type', type=str)
+    parser.add_argument('rank', type=int)
 
 
     @marshal_with(interest_field)
@@ -217,13 +218,14 @@ class InterestPointListRessource(Resource):
         long = parsed_args['long']
         type = parsed_args['type']
         rank = parsed_args['rank']
+        date = datetime.datetime.now()
 
         if name is None or description is None or lat is None or long is None:
             abort(400, message="Missing arguments")
         if session.query(InterestPoint).filter(InterestPoint.name == name).first() is not None:
             abort(400, message="Poi {} already exists".format(name))
         poi = InterestPoint(name=name, description=description, lat=lat,
-                            long=long, type=type, userName=g.user.username)
+                            long=long, type=type, userName=g.user.username, date=date)
         if rank is not None:
             if rank < 1 or rank > 5:
                 abort(400, message="rank should be between 1 to 5")

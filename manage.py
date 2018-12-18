@@ -69,6 +69,7 @@ class InterestPoint(db.Model):
     long = db.Column(db.Float)
     userName = db.Column(db.String(255))
     type = db.Column(db.String(255))
+    date = db.Column(db.DateTime)
     rank = db.Column(db.Integer)
     imageUrls = []
 
