@@ -181,9 +181,10 @@ class InterestPointRessource(Resource):
         poi.lat = parsed_args['lat']
         poi.long = parsed_args['long']
         rank = parsed_args['rank']
+
         if rank is not None:
             if rank < 1 or rank > 5:
-                abort(400, message="rank should be between 1 to 5")
+                    abort(400, message="rank should be between 1 to 5")
             else:
                 poi.rank = rank
         session.add(poi)
