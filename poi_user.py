@@ -54,7 +54,7 @@ class User_Poi(Resource):
         return pois
 
     @authToken.login_required
-    def delete(self, id):
+    def delete(id):
         poi = session.query(InterestPoint).filter(InterestPoint.id == id).filter(InterestPoint.userName == g.user.username).first()
         if not poi:
             abort(404, message="poi {} doesn't exist".format(id))

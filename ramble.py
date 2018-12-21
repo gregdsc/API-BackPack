@@ -67,7 +67,7 @@ class Ramble_ressource(Resource):
         rando.point = points
         return rando
 
-    def delete(self, id, id_point):
+    def delete(id, id_point):
         rando = session.query(Ramble).filter(Ramble.id == id).first()
         rando_details = session.query(Ramble_details.point).filter(Ramble_details.point == id_point).delete()
         session.commit()
