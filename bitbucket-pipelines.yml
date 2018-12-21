@@ -12,7 +12,7 @@ pipelines:
            name: Deploy to Heroku
            deployment: production   # set to test, staging or production
            script:
-              - git push https://heroku:$API_KEY_HEROKU@git.heroku.com/$APP_NAME.git HEA
+              - git push https://heroku:$API_KEY_HEROKU@git.heroku.com/$APP_NAME.git HEAD
       development:
        - step:
           name: Test
