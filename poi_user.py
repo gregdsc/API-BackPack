@@ -46,8 +46,35 @@ class User_Poi(Resource):
     parser.add_argument('type', type=str)
 
     @marshal_with(interest_field)
+    @authToken.login_required
     def get(self):
         pois = session.query(InterestPoint).filter(InterestPoint.userName == g.user.username).all()
         for poi in pois:
             poi.imageUrls = session.query(ImageUrls).filter(ImageUrls.poiName == poi.name).all()
         return pois
+
+    @authToken.login_required
+    def delete(id):
+        poi = session.query(InterestPoint).filter(InterestPoint.id == id).filter(InterestPoint.userName == g.user.username).first()
+        if not poi:
+            abort(404, message="poi {} doesn't exist".format(id))
+        session.delete(poi)
+        session.commit()
+        return {}, 204
+
+@authBasic.verify_password
+def verify_password(username, password):
+    user = session.query(User).filter(User.username == username).first()
+    if not user or not user.verify_password(password):
+        return False
+    g.user = user
+    return True
+
+@authToken.verify_token
+def verify_token(token):
+    user = User.verify_auth_token(token)
+    print(token)
+    if user is None:
+        return False
+    g.user = user
+    return True

@@ -41,11 +41,10 @@ authToken = HTTPTokenAuth()
 
 class UserResource(Resource):
     parser = reqparse.RequestParser()
-    parser.add_argument('username', type=str)
-    parser.add_argument('password_change', type=dict)
+    parser.add_argument('new_username', type=str)
+    parser.add_argument('new_password', type=dict)
     parser.add_argument('new_description', type=str)
     parser.add_argument('new_pic_url', type=str)
-
     @marshal_with(user_fields)
     def get(self, id):
         user = session.query(User).filter(User.id == id).first()
@@ -71,12 +70,17 @@ class UserResource(Resource):
         user = session.query(User).filter(User.id == id).first()
         if user.id != g.user.id:
             abort(403, message="user {0} is not allowed to modify user {1}".format(id, g.user.id))
-        if parsed_args['username'] is not None:
-            user.username = parsed_args['username']
+        if parsed_args['new_username'] is not None:
+            user.username = parsed_args['new_username']
         if parsed_args['new_description'] is not None:
             user.description = parsed_args['new_description']
-        if parsed_args['password_change'] is not None:
-            password_reset = parsed_args['password_change']
+        if 'image' in request.files:
+            image = request.files['image']
+            if image.filename != '':
+                cloudinary_struct = uploader.upload(image, public_id='{0}_{1}'.format(user.username, image.filename))
+                user.pic_url = cloudinary_struct['url']
+        if parsed_args['new_password'] is not None:
+            password_reset = parsed_args['new_password']
             if not user.verify_password(password_reset['old_password']) or password_reset['new_password'] != \
                     password_reset['new_password_confirm']:
                 abort(400, message="wrong old_password or new_password and new_password_confirm mismatch")
@@ -105,7 +109,6 @@ class UserListRessource(Resource):
         username = parsed_args['username']
         password = parsed_args['password']
         description = parsed_args['description']
-
         if username is None or password is None:
             abort(400, message="Missing arguments")
         if session.query(User).filter(User.username == username).first() is not None:
@@ -113,13 +116,16 @@ class UserListRessource(Resource):
         user = User(username=username)
         user.hash_password(password)
         if description is not None:
-           user.description = description
-        image = request.files.getlist('image')
-        if image is not None:
-            cloudinary_struct = uploader.upload(image[0], public_id='{0}_{1}'.format(username, image[0].filename))
-            user.pic_url = cloudinary_struct['url']
+            user.description = description
+
+        if 'image' in request.files:
+            image = request.files['image']
+            if image.filename != '':
+                cloudinary_struct = uploader.upload(image, public_id='{0}_{1}'.format(username, image.filename))
+                user.pic_url = cloudinary_struct['url']
         session.add(user)
         session.commit()
+
         return user, 201
 
 

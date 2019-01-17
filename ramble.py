@@ -67,7 +67,7 @@ class Ramble_ressource(Resource):
         rando.point = points
         return rando
 
-    def delete(self, id, id_point):
+    def delete(id, id_point):
         rando = session.query(Ramble).filter(Ramble.id == id).first()
         rando_details = session.query(Ramble_details.point).filter(Ramble_details.point == id_point).delete()
         session.commit()
@@ -131,20 +131,3 @@ def verify_token(token):
         return False
     g.user = user
     return True
-
-def dumpclean(obj):
-    if type(obj) == dict:
-        for k, v in obj.items():
-            if hasattr(v, '__iter__'):
-                print(k)
-                dumpclean(v)
-            else:
-                print('%s : %s' % (k, v))
-    elif type(obj) == list:
-        for v in obj:
-            if hasattr(v, '__iter__'):
-                dumpclean(v)
-            else:
-                print(v)
-    else:
-        print(obj)
