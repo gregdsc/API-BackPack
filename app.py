@@ -31,7 +31,10 @@ api.add_resource(User_Poi, '/poi_me/<string:id>', '/poi_me/<string:id>', endpoin
 api.add_resource(GetToken, '/token', endpoint='token')
 
 # Activity #
-api.add_resource(ActivityResource, '/', '/activity', '/activity/', endpoint='activity')
+api.add_resource(ActivityResource, '/', '/activities', '/activities/', endpoint='activities')
+
+# Activity user #
+api.add_resource(User_Activity, '/', '/activity', '/activity/', endpoint='activity')
 
 # Activity Calories #
 api.add_resource(ActivityCalorie, '/activity/calorie/', endpoint='calorie')
