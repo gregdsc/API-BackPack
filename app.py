@@ -8,6 +8,7 @@ from activity import *
 from resources import *
 from poi_user import *
 from Comment import *
+from historique import *
 
 api = Api(app)
 CORS(app)
@@ -73,8 +74,14 @@ api.add_resource(Ramble_ressource, '/rambles/<int:id>', endpoint='rambles')
 # comment #
 
 api.add_resource(comment, '/comments', '/comments/', endpoint='comments')
-api.add_resource(comment, '/comment/<int:id_poi>', endpoint='comment')
+api.add_resource(comment, '/comment/<int:id>', endpoint='comment')
+api.add_resource(comment, '/comment/point_interet/<int:id_poi>', endpoint='point_interet')
 
+
+# History
+
+api.add_resource(historique_date, '/history/date', endpoint='date')
+api.add_resource(historique_rank, '/history/rank', endpoint='rank')
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')

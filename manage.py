@@ -135,6 +135,7 @@ class Comment(db.Model):
     creation = db.Column(db.DateTime)
     details = db.Column(db.String(255))
     derniere_modification = db.Column(db.DateTime)
+    rank = db.Column(db.Integer)
     point_id = db.Column(db.Integer, db.ForeignKey('interestPoint.id'))
 
 
