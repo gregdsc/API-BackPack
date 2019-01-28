@@ -7,6 +7,8 @@ from ramble import *
 from activity import *
 from resources import *
 from poi_user import *
+from Comment import *
+from historique import *
 
 api = Api(app)
 CORS(app)
@@ -31,7 +33,10 @@ api.add_resource(User_Poi, '/poi_me/<string:id>', '/poi_me/<string:id>', endpoin
 api.add_resource(GetToken, '/token', endpoint='token')
 
 # Activity #
-api.add_resource(ActivityResource, '/', '/activity', '/activity/', endpoint='activity')
+api.add_resource(ActivityResource, '/', '/activities', '/activities/', endpoint='activities')
+
+# Activity user #
+api.add_resource(User_Activity, '/', '/activity', '/activity/', endpoint='activity')
 
 # Activity Calories #
 api.add_resource(ActivityCalorie, '/activity/calorie/', endpoint='calorie')
@@ -65,6 +70,18 @@ api.add_resource(Ramble_List_ressource, '/ramble', '/ramble/', endpoint='ramble'
 api.add_resource(Ramble_ressource, '/rambl', '/rambl/', endpoint='rambl')
 api.add_resource(Ramble_ressource, '/ramble_point/<int:id>/<int:id_point>', endpoint='ramble_point')
 api.add_resource(Ramble_ressource, '/rambles/<int:id>', endpoint='rambles')
+
+# comment #
+
+api.add_resource(comment, '/comments', '/comments/', endpoint='comments')
+api.add_resource(comment, '/comment/<int:id>', endpoint='comment')
+api.add_resource(comment, '/comment/point_interet/<int:id_poi>', endpoint='point_interet')
+
+
+# History
+
+api.add_resource(historique_date, '/history/date', endpoint='date')
+api.add_resource(historique_rank, '/history/rank', endpoint='rank')
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')

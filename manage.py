@@ -7,7 +7,7 @@ from passlib.apps import custom_app_context as pwd_context
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer, BadSignature, SignatureExpired
 from db import session
 from flask_cors import CORS
-
+from sqlalchemy import ForeignKey
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -22,6 +22,20 @@ manager = Manager(app)
 manager.add_command('db', MigrateCommand)
 
 
+comment_poi_association = db.Table(
+    'comment_poi',
+    db.Column('poi_id', db.Integer, ForeignKey('interestPoint.id')),
+    db.Column('comment_id', db.Integer, ForeignKey('comments.id'))
+)
+
+
+user_comment_association = db.Table(
+    'user_comment',
+    db.Column('comment_id', db.Integer, ForeignKey('comments.id')),
+    db.Column('user_id', db.Integer, ForeignKey('users.id'))
+)
+
+
 class User(db.Model):
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
@@ -29,6 +43,7 @@ class User(db.Model):
     password_hash = db.Column(db.String(255))
     description = db.Column(db.String(500))
     pic_url = db.Column(db.String(255))
+    #comment = db.relationship('Comment', lazy='joined')
 
     def hash_password(self, password):
         self.password_hash = pwd_context.encrypt(password)
@@ -71,6 +86,7 @@ class InterestPoint(db.Model):
     type = db.Column(db.String(255))
     date = db.Column(db.DateTime)
     rank = db.Column(db.Integer)
+    comment = db.relationship('Comment', lazy='joined')
     imageUrls = []
 
 
@@ -110,6 +126,18 @@ class Ramble_details(db.Model):
     id_ramble = db.Column(db.Integer, db.ForeignKey('ramble.id'))
     point = db.Column(db.Integer)
     ordre = db.Column(db.Integer)
+
+
+class Comment(db.Model):
+    __tablename__ = 'comments'
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(255))
+    creation = db.Column(db.DateTime)
+    details = db.Column(db.String(255))
+    derniere_modification = db.Column(db.DateTime)
+    rank = db.Column(db.Integer)
+    point_id = db.Column(db.Integer, db.ForeignKey('interestPoint.id'))
+
 
 if __name__ == '__main__':
     manager.run()
