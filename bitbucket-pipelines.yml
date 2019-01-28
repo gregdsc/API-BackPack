@@ -18,6 +18,10 @@ pipelines:
           name: Test
           script:
             - echo "test"
+
+            Ran 6 tests in 5.711s
+
+            OK
        - step:
           name: Deploy to Heroku
           deployment: production   # set to test, staging or production
