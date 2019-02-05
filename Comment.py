@@ -32,15 +32,6 @@ champs = {
 
 
 class comment(Resource):
-    parser = reqparse.RequestParser()
-    parser.add_argument('description', type=str)
-    parser.add_argument('id', type=int)
-    parser.add_argument('rank', type=int)
-
-    @marshal_with(champs)
-    def get(self, id_poi):
-        comment = session.query(InterestPoint).filter(InterestPoint.id == id_poi).all()
-        return comment, 201
 
     @marshal_with(champs)
     def get(self):
@@ -78,6 +69,18 @@ class comment(Resource):
         session.delete(comment)
         session.commit()
         return {}, 204
+
+class comment_point(Resource):
+    parser = reqparse.RequestParser()
+    parser.add_argument('description', type=str)
+    parser.add_argument('id', type=int)
+    parser.add_argument('rank', type=int)
+
+    @marshal_with(champs)
+    def get(self, id_poi):
+        comment = session.query(InterestPoint).filter(InterestPoint.id == id_poi).all()
+        return comment, 201
+
 
 @authToken.verify_token
 def verify_token(token):
