@@ -32,6 +32,10 @@ champs = {
 
 
 class comment(Resource):
+    parser = reqparse.RequestParser()
+    parser.add_argument('description', type=str)
+    parser.add_argument('id', type=int)
+    parser.add_argument('rank', type=int)
 
     @marshal_with(champs)
     def get(self):
