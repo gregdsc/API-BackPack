@@ -35,7 +35,7 @@ class historique_date(Resource):
     @authToken.login_required
     @marshal_with(interest_field)
     def get(self):
-        pois = session.query(InterestPoint).order_by(InterestPoint.date.asc()).all()
+        pois = session.query(InterestPoint).filter(InterestPoint.userName == g.user.username).order_by(InterestPoint.date.asc()).all()
         return pois, 201
 
 class historique_rank(Resource):
@@ -43,7 +43,7 @@ class historique_rank(Resource):
     @authToken.login_required
     @marshal_with(interest_field)
     def get(self):
-        pois = session.query(InterestPoint).order_by(InterestPoint.rank.asc()).all()
+        pois = session.query(InterestPoint).filter(InterestPoint.userName == g.user.username).order_by(InterestPoint.rank.asc()).all()
         return pois, 201
 
 @authToken.verify_token
