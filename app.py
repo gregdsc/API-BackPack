@@ -71,11 +71,11 @@ api.add_resource(Ramble_ressource, '/rambl', '/rambl/', endpoint='rambl')
 api.add_resource(Ramble_ressource, '/ramble_point/<int:id>/<int:id_point>', endpoint='ramble_point')
 api.add_resource(Ramble_ressource, '/rambles/<int:id>', endpoint='rambles')
 
-# comment #
+# Comment #
 
 api.add_resource(comment, '/comments', '/comments/', endpoint='comments')
 api.add_resource(comment, '/comment/<int:id>', endpoint='comment')
-api.add_resource(comment, '/comment/point_interet/<int:id_poi>', endpoint='point_interet')
+api.add_resource(comment_point, '/comment/point_interet/<int:id_poi>', endpoint='point_interet')
 
 
 # History
