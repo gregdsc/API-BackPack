@@ -23,4 +23,5 @@ class Comment(db.Model):
     details = db.Column(db.String(255))
     derniere_modification = db.Column(db.DateTime)
     rank = db.Column(db.Integer)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     point_id = db.Column(db.Integer, db.ForeignKey('interest_points.id'))
