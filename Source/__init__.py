@@ -1,10 +1,8 @@
-
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_mail import Mail
 from configuration import config
 from flask_cors import CORS
-
 
 db = SQLAlchemy()
 mail = Mail()
