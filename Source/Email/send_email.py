@@ -18,6 +18,6 @@ def send_mail(send_from, subject, send_to, html):
 
     smtp = smtplib.SMTP(host='smtp.gmail.com', port=587)
     smtp.starttls()
-    smtp.login('noreply.backpack@gmail.com', '5&K541KPVzf=Q,aOkoi21[vXV,qo')
+    smtp.login('noreply.backpack@gmail.com', 'Wpn%:)z5"KP4-&6Av,XodGC-dW8V')
     smtp.sendmail(send_from, send_to, msg.as_string())
     smtp.close()
