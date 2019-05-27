@@ -30,7 +30,7 @@ interest_field = {
     'type': fields.String,
     'rank': fields.Integer,
     'imageUrls': fields.List(fields.String(attribute='url')),
-    'uri': fields.Url('poi', absolute=True),
+  //'uri': fields.Url('poi', absolute=True),
 }
 
 
