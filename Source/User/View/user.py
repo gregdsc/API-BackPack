@@ -14,7 +14,7 @@ from Source.Email.send_email import *
 from Source.User.View.user_field import *
 from flask import render_template
 from Source.Configuration.sight_engine import *
-from Moderation_images.moderate_images import *
+from Source.Moderation_images.moderate_images import *
 
 EMAIL_REGEX = re.compile(r"[^@]+@[^@]+\.[^@]+")
 
