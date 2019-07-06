@@ -1,4 +1,4 @@
-from Moderation_images.moderate_images import Dectection
+from Source.Moderation_images.moderate_images import Dectection
 from Source.Point.Model import *
 from Source.Point.Model.model_point import Point_picture
 from Source.User.Model.model_user import *
