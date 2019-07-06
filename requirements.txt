@@ -39,3 +39,4 @@ wrapt==1.10.11
 exponent-server-sdk==0.2.0
 rollbar
 google-api-python-client==1.7.9
+marshmallow==2.19.5
