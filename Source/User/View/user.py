@@ -60,9 +60,9 @@ from google.oauth2 import service_account
 
 
 
-credentials = service_account.Credentials. from_service_account_file(r'C:\Users\Alexandre\Desktop\project.json')
+#credentials = service_account.Credentials. from_service_account_file(r'C:\Users\Alexandre\Desktop\project.json')
 # Instantiates a client
-clients = vision.ImageAnnotatorClient(credentials=credentials)
+#clients = vision.ImageAnnotatorClient(credentials=credentials)
 
 
 
@@ -129,7 +129,7 @@ class Utilisateur(Resource):
                                                 detection.scam['prob'],
                                                 detection.offensive['prob']):
                     return 'erreur detection'
-                vision_image_manager(r'C:\Users\Alexandre\Desktop\rose.jpeg')
+                #vision_image_manager(r'C:\Users\Alexandre\Desktop\rose.jpeg')
 
                 url = User_picture(url=cloudinary_struct['url'], user_id=user.id)
                 user.user_picture.append(url)
