@@ -19,4 +19,4 @@ def verify_password(mail, password):
 @authToken.verify_token
 def verify_token(token):
     g.current_user = User.verifie_auth_token(token) if token else None
-    return g.current_user is not None
+    return g.current_user is not None, True
