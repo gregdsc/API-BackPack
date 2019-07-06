@@ -11,7 +11,7 @@ from flask_restful import request
 from cloudinary import uploader
 from Source.Point.View.point_user_field import *
 
-from Source.Authentification.Auth import *
+from Source.Authentification.Bearer import *
 from Source.Point.Model.model_point import *
 from Source.Point.View.interest_point import *
 

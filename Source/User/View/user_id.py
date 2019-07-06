@@ -3,7 +3,7 @@ from flask import url_for
 from Source.User.Model.model_user import *
 from Source.User.View.user import *
 from Source.User.View.user_field import *
-from Source.Authentification.Auth import *
+from Source.Authentification.Bearer import *
 
 from flask_restful import reqparse
 from flask_restful import abort

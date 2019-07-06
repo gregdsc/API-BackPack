@@ -7,7 +7,7 @@ from flask_restful import marshal_with
 from Source.Ramble.Model.model_ramble import *
 import datetime
 from Source.Ramble.View.ramble_fields import *
-from Source.Authentification.Auth import *
+from Source.Authentification.Bearer import *
 from Source.Point.View.interest_point_id import *
 
 class Id_ramble(Resource):

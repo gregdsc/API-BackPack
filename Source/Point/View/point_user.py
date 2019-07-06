@@ -4,7 +4,7 @@ from flask_restful import abort
 from flask_restful import Resource
 from flask_restful import marshal_with
 from cloudinary import uploader
-from Source.Authentification.Auth import *
+from Source.Authentification.Bearer import *
 from Source.Point.View.point_user_field import *
 from Source.Point.Model.model_point import *
 

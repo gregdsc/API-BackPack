@@ -14,7 +14,7 @@ from cloudinary import uploader
 import re
 from Source.Point.View.point_user_field import *
 import datetime
-from Source.Authentification.Auth import *
+from Source.Authentification.Bearer import *
 from Source.Point.Model.model_point import *
 from Source.User.View.user import *
 

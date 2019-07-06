@@ -14,7 +14,7 @@ from cloudinary import uploader
 import re
 from Source.Point.View.point_user_field import *
 import datetime
-from Source.Authentification.Auth import *
+from Source.Authentification.Bearer import *
 from Source.Point.Model.model_point import *
 from Source.User.View.user import *
 
@@ -47,9 +47,6 @@ class Point(Resource):
         date = datetime.datetime.now()
 
 
-        print(g.current_user.username)
-        print(g.current_user.id)
-
         if name is None or description is None or lat is None or long is None:
             abort(400, message="Missing arguments")
         if session.query(Interest_point).filter(Interest_point.name == name).first() is not None:
@@ -65,8 +62,9 @@ class Point(Resource):
         if visible is None:
             poi.visible = False
 
-        if 'image' in request.files:
-            image = request.files['image']
+        if 'images' in request.files:
+            image = request.files['images']
+            print(image)
             if image.filename != '':
                 cloudinary_struct = uploader.upload(image, public_id='{0}_{1}'.format(g.current_user.id,
                                                                                       image.filename))
