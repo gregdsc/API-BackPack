@@ -66,7 +66,7 @@ class Point(Resource):
 
             image = request.files['images']
             print(image)
-            if image:
+            if image.filename != '':
                 cloudinary_struct = uploader.upload(image, public_id='{0}_{1}'.format(g.current_user.id,
                                                                                       image.filename))
                 #output = client.check('nudity', 'wad', 'scam', 'offensive').set_url(cloudinary_struct['url'])
