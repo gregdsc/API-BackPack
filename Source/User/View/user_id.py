@@ -20,18 +20,12 @@ class Utilisateur_id(Resource):
     parser.add_argument('new_description', type=str)
     parser.add_argument('new_pic_url', type=str)
 
+    @marshal_with(user_fields)
     def get(self, id):
         user = session.query(User).filter(User.id == id).first()
-        user_fields = {
-            'id': user.id,
-            'username': user.username,
-            'password_hash': user.password_hash,
-            'description': user.description,
-            'pic_url': user.user_picture.url
-        }
         if not user:
             abort(404, message="user {} doesn't exist".format(id))
-        return user_fields
+        return user
 
     @authToken.login_required
     def delete(self, id):
