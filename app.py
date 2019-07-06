@@ -12,6 +12,7 @@ from Source.Ramble.View.ramble import *
 from Source.Ramble.View.ramble_id import *
 from Source.Comment.View.comment import *
 from Source.History.View.history import *
+from Source.Point.View.point_visible_user import *
 
 from Source.__init__ import *
 
@@ -33,6 +34,7 @@ api.add_resource(User_Poi, '/poi_me/<string:id>', '/poi_me/<string:id>', endpoin
 api.add_resource(Point, '/pois', '/pois/', endpoint='pois')
 api.add_resource(Point_id, '/poi/<string:id>', endpoint='poi')
 api.add_resource(Point_filtre, '/filter/<string:type>', endpoint='filter')
+api.add_resource(Point_visible_user, '/poi_visible/<int:id>', endpoint='poi_visible')
 
 
 # Token #

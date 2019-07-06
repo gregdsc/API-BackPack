@@ -1,3 +1,4 @@
+from Moderation_images.moderate_images import Dectection
 from Source.Point.Model import *
 from Source.Point.Model.model_point import Point_picture
 from Source.User.Model.model_user import *
@@ -15,7 +16,7 @@ from Source.Point.View.point_user_field import *
 import datetime
 from Source.Authentification.Auth import *
 from Source.Point.Model.model_point import *
-
+from Source.User.View.user import *
 
 class Point(Resource):
     parser = reqparse.RequestParser()
@@ -25,6 +26,7 @@ class Point(Resource):
     parser.add_argument('long', type=float)
     parser.add_argument('type', type=str)
     parser.add_argument('rank', type=int)
+    parser.add_argument('visible', type=bool)
 
     @marshal_with(interest_field)
     def get(self):
@@ -41,7 +43,12 @@ class Point(Resource):
         long = parsed_args['long']
         type = parsed_args['type']
         rank = parsed_args['rank']
+        visible = parsed_args['visible']
         date = datetime.datetime.now()
+
+
+        print(g.current_user.username)
+        print(g.current_user.id)
 
         if name is None or description is None or lat is None or long is None:
             abort(400, message="Missing arguments")
@@ -55,12 +62,25 @@ class Point(Resource):
                 abort(400, message="rank should be between 1 to 5")
             else:
                 poi.rank = rank
+        if visible is None:
+            poi.visible = False
 
         if 'image' in request.files:
             image = request.files['image']
             if image.filename != '':
                 cloudinary_struct = uploader.upload(image, public_id='{0}_{1}'.format(g.current_user.id,
                                                                                       image.filename))
+                output = client.check('nudity', 'wad', 'scam', 'offensive').set_url(cloudinary_struct['url'])
+
+                j = json.loads(json.dumps(output))
+                detection = Dectection(**j)
+                if not detection.check_moderate(detection.nudity['raw'],
+                                                detection.weapon,
+                                                detection.alcohol,
+                                                detection.drugs,
+                                                detection.scam['prob'],
+                                                detection.offensive['prob']):
+                    return 'erreur detection'
                 picture = Point_picture(url=cloudinary_struct['url'], point_id=poi.id)
                 poi.point_picture.append(picture)
 

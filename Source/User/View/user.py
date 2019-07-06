@@ -1,9 +1,11 @@
+import base64
+
+from googleapiclient import discovery
+
 from Source.User.Model.model_user import *
-from flask import g
+from flask import json
 from flask_restful import reqparse
-from flask_restful import abort
 from flask_restful import Resource
-from flask_restful import fields
 from flask_restful import marshal_with
 from flask_restful import request
 from cloudinary import uploader
@@ -11,8 +13,59 @@ import re
 from Source.Email.send_email import *
 from Source.User.View.user_field import *
 from flask import render_template
+from Source.Configuration.sight_engine import *
+from Moderation_images.moderate_images import *
 
 EMAIL_REGEX = re.compile(r"[^@]+@[^@]+\.[^@]+")
+
+import json
+
+def vision_image_manager(image_file):
+    # Instantiates a client
+    service = discovery.build('vision', 'v1', credentials=credentials)
+    # text.png is the image file.
+
+
+    file_name = str(image_file)
+    print(file_name)
+    with open(file_name, 'rb') as image:
+        image_content = base64.b64encode(image.read())
+        service_request = service.images().annotate(body={
+            'requests': [{
+                'image': {
+                    'content': image_content.decode('UTF-8')
+                },
+                'features': [{
+                    'type': 'LABEL_DETECTION',
+                }]
+            }]
+        })
+    response = service_request.execute()
+    print(response['responses'])
+    res_dict = dict(response)
+    return res_dict
+
+
+# Parse JSON into an object with attributes corresponding to dict keys.
+
+import io
+import os
+
+# Imports the Google Cloud client library
+from google.cloud import vision, language
+from google.cloud.vision import types
+from google.cloud.language import enums, types
+from google.oauth2 import service_account
+
+
+
+
+credentials = service_account.Credentials. from_service_account_file(r'C:\Users\Alexandre\Desktop\project.json')
+# Instantiates a client
+clients = vision.ImageAnnotatorClient(credentials=credentials)
+
+
+
 
 class Utilisateur(Resource):
     parser = reqparse.RequestParser()
@@ -28,6 +81,8 @@ class Utilisateur(Resource):
         if not users:
             abort(404, message="Please enter an user before")
         return users
+
+
 
     @marshal_with(user_fields)
     def post(self):
@@ -59,9 +114,25 @@ class Utilisateur(Resource):
 
         if 'image' in request.files:
             image = request.files['image']
+            if len(image.filename) >= 120:
+                abort(400, message='veuillez renommer votre image, celle-ci ne doit pas dépasser 120 caractère')
             if image.filename != '':
-                cloudinary_struct = uploader.upload(image, public_id='{0}_{1}'.format(username, image.filename))
-                user = User(user_picture=[User_picture(url=cloudinary_struct['url'])])
+                cloudinary_struct = uploader.upload(image, public_id='{0}_{1}'.format(user.id, image.filename))
+                output = client.check('nudity', 'wad', 'scam', 'offensive').set_url(cloudinary_struct['url'])
+
+                j = json.loads(json.dumps(output))
+                detection = Dectection(**j)
+                if not detection.check_moderate(detection.nudity['raw'],
+                                                detection.weapon,
+                                                detection.alcohol,
+                                                detection.drugs,
+                                                detection.scam['prob'],
+                                                detection.offensive['prob']):
+                    return 'erreur detection'
+                vision_image_manager(r'C:\Users\Alexandre\Desktop\rose.jpeg')
+
+                url = User_picture(url=cloudinary_struct['url'], user_id=user.id)
+                user.user_picture.append(url)
         user.hash_password(password)
         session.add(user)
         session.commit()

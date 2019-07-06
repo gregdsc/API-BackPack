@@ -17,7 +17,7 @@ class User(db.Model):
     password_hash = db.Column(db.String(255))
     mail = db.Column(db.String(255))
     description = db.Column(db.String(500))
-    user_picture = db.relationship('User_picture', lazy='joined', uselist=False)
+    user_picture = db.relationship('User_picture', lazy='joined')
     comment = db.relationship('Comment', lazy='joined')
     point = db.relationship('Interest_point', lazy='joined')
     ramble = db.relationship('Ramble', lazy='joined')

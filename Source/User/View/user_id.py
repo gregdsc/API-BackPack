@@ -64,6 +64,17 @@ class Utilisateur_id(Resource):
                 for image in images:
                     cloudinary_struct = uploader.upload(image, public_id='{0}_{1}'.format(user.id, image.filename))
                     url = User_picture(user_id=user.id, url=cloudinary_struct['url'])
+                    output = client.check('nudity', 'wad', 'scam', 'offensive').set_url(cloudinary_struct['url'])
+
+                    j = json.loads(json.dumps(output))
+                    detection = Dectection(**j)
+                    if not detection.check_moderate(detection.nudity['raw'],
+                                                    detection.weapon,
+                                                    detection.alcohol,
+                                                    detection.drugs,
+                                                    detection.scam['prob'],
+                                                    detection.offensive['prob']):
+                        return 'erreur detection'
                     user.user_picture.append(url)
                     if session.query(User_picture).filter(User_picture.url == url.url).first() is None:
                         session.add(url)
@@ -71,6 +82,17 @@ class Utilisateur_id(Resource):
                 url = session.query(User_picture).filter(User_picture.user_id == user.id).first()
                 if image.filename != '':
                     cloudinary_struct = uploader.upload(image, public_id='{0}_{1}'.format(user.id, image.filename))
+                    output = client.check('nudity', 'wad', 'scam', 'offensive').set_url(cloudinary_struct['url'])
+
+                    j = json.loads(json.dumps(output))
+                    detection = Dectection(**j)
+                    if not detection.check_moderate(detection.nudity['raw'],
+                                                    detection.weapon,
+                                                    detection.alcohol,
+                                                    detection.drugs,
+                                                    detection.scam['prob'],
+                                                    detection.offensive['prob']):
+                        return 'erreur detection'
                     url.url = cloudinary_struct['url']
                     user.user_picture.append(url)
 

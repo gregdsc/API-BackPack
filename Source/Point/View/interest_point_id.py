@@ -13,6 +13,7 @@ from Source.Point.View.point_user_field import *
 
 from Source.Authentification.Auth import *
 from Source.Point.Model.model_point import *
+from Source.Point.View.interest_point import *
 
 class Point_id(Resource):
     parser = reqparse.RequestParser()
@@ -22,6 +23,7 @@ class Point_id(Resource):
     parser.add_argument('long', type=float)
     parser.add_argument('type', type=str)
     parser.add_argument('rank', type=int)
+    parser.add_argument('visible', type=bool)
 
 
     @marshal_with(interest_field)
@@ -59,6 +61,8 @@ class Point_id(Resource):
                 poi.lat = parsed_args['lat']
             if parsed_args['long'] is not None:
                 poi.long = parsed_args['long']
+            if parsed_args['visible'] is not None:
+                poi.visible = parsed_args['visible']
             if parsed_args['rank'] is not None:
                 rank = parsed_args['rank']
                 if rank is not None:
@@ -74,6 +78,17 @@ class Point_id(Resource):
                     for image in images:
                         cloudinary_struct = uploader.upload(image, public_id='{0}_{1}'.format(g.current_user.id,
                                                                                               image.filename))
+                        output = client.check('nudity', 'wad', 'scam', 'offensive').set_url(cloudinary_struct['url'])
+
+                        j = json.loads(json.dumps(output))
+                        detection = Dectection(**j)
+                        if not detection.check_moderate(detection.nudity['raw'],
+                                                        detection.weapon,
+                                                        detection.alcohol,
+                                                        detection.drugs,
+                                                        detection.scam['prob'],
+                                                        detection.offensive['prob']):
+                            return 'erreur detection'
                         url = Point_picture(point_id=poi.id, url=cloudinary_struct['url'])
                         poi.point_picture.append(url)
                         if session.query(Point_picture).filter(Point_picture.url == url.url).first() is None:
@@ -83,6 +98,17 @@ class Point_id(Resource):
                     if image.filename != '':
                         cloudinary_struct = uploader.upload(image, public_id='{0}_{1}'.format(g.current_user.id,
                                                                                               image.filename))
+                        output = client.check('nudity', 'wad', 'scam', 'offensive').set_url(cloudinary_struct['url'])
+
+                        j = json.loads(json.dumps(output))
+                        detection = Dectection(**j)
+                        if not detection.check_moderate(detection.nudity['raw'],
+                                                        detection.weapon,
+                                                        detection.alcohol,
+                                                        detection.drugs,
+                                                        detection.scam['prob'],
+                                                        detection.offensive['prob']):
+                            return 'erreur detection'
                         url.url = cloudinary_struct['url']
                         poi.point_picture.append(url)
 

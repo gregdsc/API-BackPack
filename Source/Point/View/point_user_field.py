@@ -17,6 +17,7 @@ interest_field = {
     'username': fields.String,
     'type': fields.String,
     'rank': fields.Integer,
+    'visible': fields.Boolean,
     'point_picture': fields.List(fields.String(attribute='url')),
     'uri': fields.Url('pois', absolute=True),
 }

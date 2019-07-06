@@ -1,3 +1,5 @@
+from sqlalchemy import ForeignKey
+
 from Source.__init__ import *
 from Source.User.Model.model_user import *
 
@@ -12,6 +14,7 @@ class Interest_point(db.Model):
     type = db.Column(db.String(255))
     date = db.Column(db.DateTime)
     rank = db.Column(db.Integer)
+    visible = db.Column(db.Boolean)
     comment = db.relationship('Comment', lazy='joined')
     point_picture = db.relationship('Point_picture', lazy='joined')
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))

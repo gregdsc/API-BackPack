@@ -11,7 +11,7 @@ def send_mail(send_from, subject, send_to, html):
 
     msg = MIMEMultipart()
     msg['From'] = send_from
-    msg['To'] = ', '.join(send_to)
+    msg['To'] = ','.join(send_to)
     msg['Subject'] = subject
 
     msg.attach(MIMEText(html, 'html'))
