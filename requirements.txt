@@ -38,4 +38,4 @@ Werkzeug==0.14.1
 wrapt==1.10.11
 exponent-server-sdk==0.2.0
 rollbar
-installer google-api-python-client==1.7.9
+google-api-python-client==1.7.9
