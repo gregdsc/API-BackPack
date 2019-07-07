@@ -130,8 +130,9 @@ class Utilisateur(Resource):
         user.hash_password(password)
         session.add(user)
         session.commit()
-
-        send_mail('noreply.backpack@gmail.com', 'Inscription Backpack',
-                  [user.mail], render_template('template_test.html'))
-
+        try:
+            send_mail('noreply.backpack@gmail.com', 'Inscription Backpack',
+                     [user.mail], render_template('template_test.html'))
+        except:
+            return 201, "mail non envoyé "
         return user, 201
