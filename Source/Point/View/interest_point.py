@@ -12,6 +12,7 @@ from flask_restful import request
 from flask_httpauth import HTTPBasicAuth, HTTPTokenAuth
 from cloudinary import uploader
 import re
+
 from Source.Point.View.point_user_field import *
 import datetime
 from Source.Authentification.Bearer import *
@@ -69,17 +70,17 @@ class Point(Resource):
             if image.filename != '':
                 cloudinary_struct = uploader.upload(image, public_id='{0}_{1}'.format(g.current_user.id,
                                                                                       image.filename))
-                #output = client.check('nudity', 'wad', 'scam', 'offensive').set_url(cloudinary_struct['url'])
+                output = client.check('nudity', 'wad', 'scam', 'offensive').set_url(cloudinary_struct['url'])
 
-                #j = json.loads(json.dumps(output))
-                #detection = Dectection(**j)
-                #if not detection.check_moderate(detection.nudity['raw'],
-                 #                               detection.weapon,
-                  #                              detection.alcohol,
-                   #                             detection.drugs,
-                    #                            detection.scam['prob'],
-                     #                           detection.offensive['prob']):
-                    #return 'erreur detection'
+                j = json.loads(json.dumps(output))
+                detection = Dectection(**j)
+                if not detection.check_moderate(detection.nudity['raw'],
+                                                detection.weapon,
+                                                detection.alcohol,
+                                                detection.drugs,
+                                                detection.scam['prob'],
+                                                detection.offensive['prob']):
+                    return 'erreur detection'
                 picture = Point_picture(url=cloudinary_struct['url'], point_id=poi.id)
                 poi.point_picture.append(picture)
 
