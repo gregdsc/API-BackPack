@@ -1,7 +1,5 @@
 import base64
 
-from googleapiclient import discovery
-
 from Source.User.Model.model_user import *
 from flask import json
 from flask_restful import reqparse
@@ -20,32 +18,6 @@ EMAIL_REGEX = re.compile(r"[^@]+@[^@]+\.[^@]+")
 
 import json
 
-def vision_image_manager(image_file):
-    # Instantiates a client
-    service = discovery.build('vision', 'v1', credentials=credentials)
-    # text.png is the image file.
-
-
-    file_name = str(image_file)
-    print(file_name)
-    with open(file_name, 'rb') as image:
-        image_content = base64.b64encode(image.read())
-        service_request = service.images().annotate(body={
-            'requests': [{
-                'image': {
-                    'content': image_content.decode('UTF-8')
-                },
-                'features': [{
-                    'type': 'LABEL_DETECTION',
-                }]
-            }]
-        })
-    response = service_request.execute()
-    print(response['responses'])
-    res_dict = dict(response)
-    return res_dict
-
-
 # Parse JSON into an object with attributes corresponding to dict keys.
 
 import io
@@ -60,10 +32,30 @@ from google.oauth2 import service_account
 
 
 
-#credentials = service_account.Credentials. from_service_account_file(r'C:\Users\Alexandre\Desktop\project.json')
-# Instantiates a client
+#credentials = service_account.Credentials. from_service_account_file(r'C:\Users\Alexandre\PycharmProjects\Backpack-api\project.json')
+credentials = service_account.Credentials. from_service_account_file(r'.\project.json')
+
 #clients = vision.ImageAnnotatorClient(credentials=credentials)
 
+
+def detect_properties_uri(uri):
+    """Detects image properties in the file located in Google Cloud Storage or
+    on the Web."""
+    from google.cloud import vision
+    client = vision.ImageAnnotatorClient(credentials=credentials)
+    image = vision.types.Image()
+    image.source.image_uri = uri
+
+    response = client.image_properties(image=image)
+    props = response.image_properties_annotation
+    print('Properties:')
+
+    for color in props.dominant_colors.colors:
+        print('frac: {}'.format(color.pixel_fraction))
+        print('\tr: {}'.format(color.color.red))
+        print('\tg: {}'.format(color.color.green))
+        print('\tb: {}'.format(color.color.blue))
+        print('\ta: {}'.format(color.color.alpha))
 
 
 
@@ -118,7 +110,7 @@ class Utilisateur(Resource):
                 abort(400, message='veuillez renommer votre image, celle-ci ne doit pas dépasser 120 caractère')
             if image.filename != '':
                 cloudinary_struct = uploader.upload(image, public_id='{0}_{1}'.format(user.id, image.filename))
-                output = client.check('nudity', 'wad', 'scam', 'offensive').set_url(cloudinary_struct['url'])
+                output = client_Sight.check('nudity', 'wad', 'scam', 'offensive').set_url(cloudinary_struct['url'])
 
                 j = json.loads(json.dumps(output))
                 detection = Dectection(**j)
@@ -129,7 +121,9 @@ class Utilisateur(Resource):
                                                 detection.scam['prob'],
                                                 detection.offensive['prob']):
                     return 'erreur detection'
-                #vision_image_manager(r'C:\Users\Alexandre\Desktop\rose.jpeg')
+                image_uri = cloudinary_struct['url']
+
+                detect_properties_uri(image_uri)
 
                 url = User_picture(url=cloudinary_struct['url'], user_id=user.id)
                 user.user_picture.append(url)
