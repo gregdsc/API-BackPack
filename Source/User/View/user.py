@@ -134,5 +134,5 @@ class Utilisateur(Resource):
             send_mail('noreply.backpack@gmail.com', 'Inscription Backpack',
                      [user.mail], render_template('template_test.html'))
         except:
-            return 201, "mail non envoyé "
+            return "mail non envoyé", 201
         return user, 201
