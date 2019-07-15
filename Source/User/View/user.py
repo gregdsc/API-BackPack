@@ -31,8 +31,10 @@ from google.oauth2 import service_account
 
 
 
+# local
+# credentials = service_account.Credentials. from_service_account_file(r'C:\Users\Alexandre\PycharmProjects\Backpack-api\project.json')
 
-#credentials = service_account.Credentials. from_service_account_file(r'C:\Users\Alexandre\PycharmProjects\Backpack-api\project.json')
+# dev / prod
 credentials = service_account.Credentials. from_service_account_file(r'project.json')
 
 #clients = vision.ImageAnnotatorClient(credentials=credentials)

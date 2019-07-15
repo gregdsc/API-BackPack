@@ -10,6 +10,7 @@ user_fields = {
 
 interest_field = {
     'id': fields.Integer,
+    'id_user': fields.Integer(attribute='user_id'),
     'name': fields.String,
     'description': fields.String,
     'lat': fields.Float,
