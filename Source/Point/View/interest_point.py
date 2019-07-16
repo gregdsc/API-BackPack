@@ -61,8 +61,8 @@ class Point(Resource):
                 abort(400, message="rank should be between 1 to 5")
             else:
                 poi.rank = rank
-        if visible is None:
-            poi.visible = False
+        if visible is not None or False:
+            poi.visible = True
 
         if 'images' in request.files:
 
