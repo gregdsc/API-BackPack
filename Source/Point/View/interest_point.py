@@ -18,6 +18,7 @@ import datetime
 from Source.Authentification.Bearer import *
 from Source.Point.Model.model_point import *
 from Source.User.View.user import *
+from Source.Configuration.sight_engine import *
 
 class Point(Resource):
     parser = reqparse.RequestParser()
@@ -70,7 +71,7 @@ class Point(Resource):
             if image.filename != '':
                 cloudinary_struct = uploader.upload(image, public_id='{0}_{1}'.format(g.current_user.id,
                                                                                       image.filename))
-                output = client.check('nudity', 'wad', 'scam', 'offensive').set_url(cloudinary_struct['url'])
+                output = client_Sight.check('nudity', 'wad', 'scam', 'offensive').set_url(cloudinary_struct['url'])
 
                 j = json.loads(json.dumps(output))
                 detection = Dectection(**j)
