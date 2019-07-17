@@ -1,11 +1,3 @@
-from flask import g
-from flask_restful import reqparse, marshal_with
-from flask_restful import Resource
-from flask_httpauth import HTTPBasicAuth, HTTPTokenAuth
-import datetime
-from Source.User.View.user import *
-from Email.send_email import send_mail
-from Feedback.View.fields_feedback import champs
 from Source.Feedback.Model.model_feedback import *
 from Source.Point.View.interest_point import *
 from Source.Authentification.token import *
