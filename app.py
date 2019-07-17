@@ -13,6 +13,7 @@ from Source.Ramble.View.ramble_id import *
 from Source.Comment.View.comment import *
 from Source.History.View.history import *
 from Source.Point.View.point_visible_user import *
+from Source.Feedback.View.feedback import *
 
 from Source.__init__ import *
 
@@ -55,6 +56,9 @@ api.add_resource(comment, '/comments', '/comments/', endpoint='comments')
 api.add_resource(comment, '/comment/<int:id>', endpoint='comment')
 api.add_resource(comment_point, '/comment/point_interet/<int:id_poi>', endpoint='point_interet')
 
+# Feedback #
+
+api.add_resource(feedback, '/feedback', '/feedback/', endpoint='feedback')
 
 # History
 

@@ -11,6 +11,7 @@ with app.app_context():
     from Source.User.Model.model_user import *
     from Source.Activity.Model.model_activity import *
     from Source.Comment.Model.model_comment import *
+    from Source.Feedback.Model.model_feedback import *
 
 
 migrate = Migrate(app, db)
