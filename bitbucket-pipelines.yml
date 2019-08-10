@@ -17,10 +17,10 @@ pipelines:
        - step:
           name: Test
           image: python:3.7.2
-          deployment: testing
+          deployment: test
           script:
             - pip install -r requirements.txt
-            - python -m pytest -ra -p no:cacheprovider tests/unitaire/test_u_user.py
+            - python -m pytest -ra -p no:cacheprovider tests
        - step:
           name: Deploy to Heroku
           deployment: production   # set to test, staging or production
