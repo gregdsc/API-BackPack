@@ -15,9 +15,9 @@ pipelines:
               - git push https://heroku:$API_KEY_HEROKU@git.heroku.com/$APP_NAME.git HEAD
       development:
        - step:
-          name: Test
+          name: Test unitaire
           image: python:3.7.2
-          deployment: test
+          deployment: Test
           script:
             - pip install -r requirements.txt
             - python -m pytest -ra -p no:cacheprovider tests
