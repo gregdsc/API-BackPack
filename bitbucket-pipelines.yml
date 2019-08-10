@@ -19,6 +19,7 @@ pipelines:
           image: python:3.7.2
           deployment: Test
           script:
+            - echo $FALSK_CONFIG
             - pip install -r requirements.txt
             - python -m pytest -ra -p no:cacheprovider tests
        - step:
