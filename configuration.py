@@ -1,11 +1,11 @@
 import os
-#from source.configuration.database_url import DB_URI
+import tempfile
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 
+
 class Config:
     SECRET_KEY = 'I7QkQImQ6468QJkKQJ434QHJHFLSssjd'
-    #SQLALCHEMY_DATABASE_URI = DB_URI
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SSL_REDIRECT = False
     MAIL_SERVER = os.environ.get('MAIL_SERVER', 'SSL0.OVH.NET')
@@ -21,10 +21,11 @@ class Config:
     def init_app(app):
         pass
 
+
 class TestingConfig(Config):
     TESTING = True
-    SQLALCHEMY_DATABASE_URI = os.environ.get('TEST_DATABASE_URL') or \
-                              'sqlite://'
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(
+        tempfile.gettempdir(), 'test.db')
     WTF_CSRF_ENABLED = False
 
 
@@ -34,8 +35,9 @@ class DevelopmentConfig(Config):
 
 
 class ProductionConfig(Config):
-    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or \
-        'sqlite:///' + os.path.join(basedir, 'data.sqlite')
+    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL')
+    DEBUG = False
+
 
 config = {
     'development': DevelopmentConfig,

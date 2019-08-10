@@ -1,41 +1,38 @@
 #!/usr/bin/env python
-
 from flask_restful import Api
-from Source.User.View.user import Utilisateur
-from Source.User.View.user_id import Utilisateur_id
-from Source.Authentification.token import *
-from Source.Point.View.point_user import *
-from Source.Point.View.interest_point import *
-from Source.Point.View.interest_point_id import *
-from Source.Point.View.interest_point_filtre import *
-from Source.Ramble.View.ramble import *
-from Source.Ramble.View.ramble_id import *
-from Source.Comment.View.comment import *
-from Source.History.View.history import *
-from Source.Point.View.point_visible_user import *
-from Source.Feedback.View.feedback import *
+from src.User.View.user import Utilisateur
+from src.User.View.user_id import UtilisateurId
+from src.Point.View.point_user import UserPoi
+from src.Point.View.interest_point import Point
+from src.Point.View.interest_point_id import PointId
+from src.Point.View.interest_point_filtre import PointFiltre
+from src.Point.View.point_visible_user import PointVisibleUser
+from src.Authentification.token import GetToken
+from src.Ramble.View.ramble import RambleRessource
+from src.Ramble.View.ramble_id import RambleId
+from src.Ramble.View.pointinramble import PointInRamble
+from src.Comment.View.comment import UserComment, CommentPoint
+from src.Feedback.View.feedback import FeedbackUser
+from src.History.View.history import HistoriqueDate, HistoriqueRank
+from src import create_app
+import os
 
-from Source.__init__ import *
-
-app = create_app(os.getenv('FLASK_CONFIG'))
-
-api = Api(app)
-
+api = Api()
 
 # User #
 api.add_resource(Utilisateur, '/', '/users', '/users/', endpoint='users')
-api.add_resource(Utilisateur_id, '/user/<int:id>', endpoint='user')
+api.add_resource(UtilisateurId, '/user/<int:id>', endpoint='user')
 
 # Poi user #
-api.add_resource(User_Poi, '/pois_me', '/pois_me/', endpoint='pois_me')
-api.add_resource(User_Poi, '/poi_me/<string:id>', '/poi_me/<string:id>', endpoint='poi_me')
+api.add_resource(UserPoi, '/pois_me', '/pois_me/', endpoint='pois_me')
+api.add_resource(UserPoi, '/poi_me/<string:id>', '/poi_me/<string:id>', endpoint='poi_me')
 
 
 # Poi #
 api.add_resource(Point, '/pois', '/pois/', endpoint='pois')
-api.add_resource(Point_id, '/poi/<string:id>', endpoint='poi')
-api.add_resource(Point_filtre, '/filter/<string:type>', endpoint='filter')
-api.add_resource(Point_visible_user, '/poi_visible/<int:id>', endpoint='poi_visible')
+api.add_resource(PointId, '/poi/<string:id>', endpoint='poi')
+api.add_resource(PointFiltre, '/filter/<string:type>', endpoint='filter')
+api.add_resource(PointVisibleUser, '/poi_visible/<int:id>', endpoint='poi_visible')
 
 
 # Token #
@@ -43,27 +40,29 @@ api.add_resource(GetToken, '/token', endpoint='token')
 
 
 # Ramble #
-api.add_resource(Ramble_ressource, '/ramble', '/ramble/', endpoint='ramble')
+api.add_resource(RambleRessource, '/ramble', '/ramble/', endpoint='ramble')
 
 # Ramble ID #
 
-api.add_resource(Point_in_Ramble, '/ramble_point/<int:id>/<int:id_point>', endpoint='ramble_point')
-api.add_resource(Id_ramble, '/rambles/<int:id>', endpoint='rambles')
+api.add_resource(PointInRamble, '/ramble_point/<int:id>/<int:id_point>', endpoint='ramble_point')
+api.add_resource(RambleId, '/rambles/<int:id>', endpoint='rambles')
 
 # Comment #
 
-api.add_resource(comment, '/comments', '/comments/', endpoint='comments')
-api.add_resource(comment, '/comment/<int:id>', endpoint='comment')
-api.add_resource(comment_point, '/comment/point_interet/<int:id_poi>', endpoint='point_interet')
+api.add_resource(UserComment, '/comments', '/comments/', endpoint='comments')
+api.add_resource(UserComment, '/comment/<int:id>', endpoint='comment')
+api.add_resource(CommentPoint, '/comment/point_interet/<int:id_poi>', endpoint='point_interet')
 
 # Feedback #
 
-api.add_resource(feedback, '/feedback', '/feedback/', endpoint='feedback')
+api.add_resource(FeedbackUser, '/feedback', '/feedback/', endpoint='feedback')
 
 # History
 
-api.add_resource(historique_date, '/history/date', endpoint='date')
-api.add_resource(historique_rank, '/history/rank', endpoint='rank')
+api.add_resource(HistoriqueDate, '/history/date', endpoint='date')
+api.add_resource(HistoriqueRank, '/history/rank', endpoint='rank')
+
+app = create_app(os.getenv('FLASK_CONFIG'))
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0')
+    app.run(host='0.0.0.0')
