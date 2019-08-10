@@ -6,6 +6,9 @@ from src.Configuration.session import session
 import datetime
 from src.Email.send_email import send_mail
 
+from flask_restful import abort
+
+
 class FeedbackUser(Resource):
     parser = reqparse.RequestParser()
     parser.add_argument('mark', type=int)
@@ -17,20 +20,22 @@ class FeedbackUser(Resource):
         details = parsed_args['details']
         mark = parsed_args['mark']
         date = datetime.datetime.now()
-        feedback = Feedback(details=details, mark=mark, username=g.current_user.username,
-                            creation_date=date)
-        session.add(feedback)
-        session.commit()
-        description_html = """\
-<html>
-  <head></head>
-  <body>
-    <h1 style="color: #5e9ca0;">Nouveau Feedback de&nbsp;""" + str(feedback.username) + """</h1>
-    <h2 style="color: #2e6c80;">rank: """ + str(feedback.mark) + """</h2>
-    <h2 style="color: #2e6c80;">Description: """ + str(feedback.details) + """</h2>
-  </body>
-</html>
-"""
-        send_mail('noreply.backpack@gmail.com', 'test du mail', ['gregoire.descombris@epitech.eu'],
-                  render_template("template_feedback.html"))
-        return 201
+
+        if details is None or mark is None:
+            abort(400, message="Missing arguments")
+        if mark < 1 or mark > 5:
+            abort(400, message="The mark should be between 1 to 5")
+        else:
+            feedback = Feedback(details=details, mark=mark, username=g.current_user.username,
+                                creation_date=date)
+            session.add(feedback)
+            session.commit()
+            try:
+                send_mail('noreply.backpack@gmail.com', 'Nouveau Feedback',
+                          ['gregoire.descombris@epitech.eu'], render_template("template_feedback.html",
+                                                                              user_name=feedback.username,
+                                                                              mark=feedback.mark,
+                                                                              details=feedback.details))
+            except:
+                abort(400, message='mail non envoyé')
+            return 201
