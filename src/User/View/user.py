@@ -77,5 +77,5 @@ class Utilisateur(Resource):
             send_mail('noreply.backpack@gmail.com', 'Inscription Backpack',
                       [user.mail], render_template('template_test.html'))
         except:
-            abort(400, message='mail non envoyé')
+            abort(403, message='mail non envoyé')
         return user, 201
