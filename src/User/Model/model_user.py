@@ -15,6 +15,7 @@ class User(db.Model):
     password_hash = db.Column(db.String(255))
     mail = db.Column(db.String(255))
     description = db.Column(db.String(500))
+    token_reset_password = db.Column(db.String(500))
     user_picture = db.relationship('UserPicture', lazy='joined')
     comment = db.relationship('Comment', lazy='joined')
     point = db.relationship('InterestPoint', lazy='joined')
@@ -28,6 +29,10 @@ class User(db.Model):
         return pwd_context.verify(password, self.password_hash)
 
     def generate_auth_token(self, expiration=600):
+        s = Serializer(current_app.config['SECRET_KEY'], expires_in=expiration)
+        return s.dumps({'id': self.id})
+
+    def generate_reset_token(self, expiration=1800):
         s = Serializer(current_app.config['SECRET_KEY'], expires_in=expiration)
         return s.dumps({'id': self.id})
 

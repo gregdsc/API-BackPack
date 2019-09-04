@@ -5,6 +5,7 @@ user_fields = {
     'username': fields.String,
     'password_hash': fields.String,
     'description': fields.String,
+    'token_reset_password': fields.String,
     'user_picture': fields.List(fields.String(attribute='url')),
     'uri': fields.Url('user', absolute=True),
 }

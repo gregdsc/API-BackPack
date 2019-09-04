@@ -8,11 +8,12 @@ from cloudinary import uploader
 import re
 from src.Email.send_email import send_mail
 from src.User.View.user_field import user_fields
-from flask import render_template
+from flask import render_template, current_app
 from src.Moderation_images.moderate_image import moderate_image
 from src.Prevision_images.propriete_image import detect_properties_uri
 EMAIL_REGEX = re.compile(r"[^@]+@[^@]+\.[^@]+")
 
+from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 
 
 class Utilisateur(Resource):
@@ -37,6 +38,8 @@ class Utilisateur(Resource):
         mail = parsed_args['mail']
         password = parsed_args['password']
         description = parsed_args['description']
+
+
 
         if username is None or password is None or mail is None:
             abort(400, message="Missing arguments")

@@ -2,6 +2,7 @@
 from flask_restful import Api
 from src.User.View.user import Utilisateur
 from src.User.View.user_id import UtilisateurId
+from src.User.View.reset_password import Reset_Password
 from src.Point.View.point_user import UserPoi
 from src.Point.View.interest_point import Point
 from src.Point.View.interest_point_id import PointId
@@ -22,6 +23,9 @@ api = Api()
 # User #
 api.add_resource(Utilisateur, '/', '/users', '/users/', endpoint='users')
 api.add_resource(UtilisateurId, '/user/<int:id>', endpoint='user')
+
+# Reset_password #
+api.add_resource(Reset_Password, '/reset_password', '/reset_password/', endpoint='reset_password')
 
 # Poi user #
 api.add_resource(UserPoi, '/pois_me', '/pois_me/', endpoint='pois_me')
