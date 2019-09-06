@@ -7,6 +7,7 @@ from flask import current_app, abort
 from src.Comment.Model.model_comment import Comment
 from src.Ramble.Model.model_ramble import Ramble, RambleDetail
 from src.Point.Model.model_point import InterestPoint, PointPicture
+ # test
 
 class User(db.Model):
     __tablename__ = 'users'
