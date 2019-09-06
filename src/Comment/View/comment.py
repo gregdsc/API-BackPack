@@ -4,8 +4,8 @@ from flask_restful import Resource
 from flask_restful import marshal_with
 from src.Authentification.authentification import authToken
 from src.Configuration.session import session
-from src.Comment.View.fields_comment import champs
-from src.Point.View.interest_point import Point, InterestPoint
+from src.Comment.View.fields_comment import champs, champs_comment
+from src.Point.Model.model_point import PointPicture, InterestPoint
 from src.Comment.Model.model_comment import Comment
 import datetime
 
@@ -16,9 +16,9 @@ class UserComment(Resource):
     parser.add_argument('id', type=int)
     parser.add_argument('rank', type=int)
 
-    @marshal_with(champs)
+    @marshal_with(champs_comment)
     def get(self):
-        comment = session.query(Point).all()
+        comment = session.query(Comment).all()
         return comment, 201
 
     @authToken.login_required
@@ -38,8 +38,8 @@ class UserComment(Resource):
     def put(self, id_comment):
         parsed_args = self.parser.parse_args()
 
-        comment = session.query(Comment).filter(Comment.id == id_comment).filter(Comment.username ==
-                                                                                 g.current_user.username) \
+        comment = session.query(Comment).filter(Comment.id == id_comment).filter(Comment.user_id ==
+                                                                                 g.current_user.id) \
             .first()
         date = datetime.datetime.now()
         if parsed_args['description'] is not None:

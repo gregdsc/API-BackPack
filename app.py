@@ -15,7 +15,9 @@ from src.Ramble.View.pointinramble import PointInRamble
 from src.Comment.View.comment import UserComment, CommentPoint
 from src.Feedback.View.feedback import FeedbackUser
 from src.History.View.history import HistoriqueDate, HistoriqueRank
+from src.Prevision_images.prevision_image import PrevisionImage
 from src import create_app
+
 import os
 
 api = Api()
@@ -65,6 +67,11 @@ api.add_resource(FeedbackUser, '/feedback', '/feedback/', endpoint='feedback')
 
 api.add_resource(HistoriqueDate, '/history/date', endpoint='date')
 api.add_resource(HistoriqueRank, '/history/rank', endpoint='rank')
+
+
+# Prevision
+
+api.add_resource(PrevisionImage, '/prevision', '/prevision/', endpoint='prevision')
 
 app = create_app(os.getenv('FLASK_CONFIG'))
 

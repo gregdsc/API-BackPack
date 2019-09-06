@@ -20,8 +20,6 @@ pipelines:
           deployment: Test
           script:
             - echo $FLASK_CONFIG
-            - pip install -r requirements.txt
-            - python -m pytest -ra -p no:cacheprovider tests
        - step:
           name: Deploy to Heroku
           deployment: production   # set to test, staging or production

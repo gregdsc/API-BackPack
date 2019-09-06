@@ -1,13 +1,10 @@
 from sqlalchemy import ForeignKey
 from src import db
-
-
 comment_poi_association = db.Table(
     'comment_poi',
     db.Column('poi_id', db.Integer, ForeignKey('interest_points.id')),
     db.Column('comment_id', db.Integer, ForeignKey('comments.id'))
 )
-
 
 user_comment_association = db.Table(
     'user_comment',

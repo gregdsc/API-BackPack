@@ -5,8 +5,8 @@ from src import db
 from sqlalchemy import ForeignKey
 from flask import current_app, abort
 from src.Comment.Model.model_comment import Comment
-from src.Point.Model.model_point import InterestPoint
-from src.Ramble.Model.model_ramble import Ramble
+from src.Ramble.Model.model_ramble import Ramble, RambleDetail
+from src.Point.Model.model_point import InterestPoint, PointPicture
 
 class User(db.Model):
     __tablename__ = 'users'
@@ -14,8 +14,8 @@ class User(db.Model):
     username = db.Column(db.String(255))
     password_hash = db.Column(db.String(255))
     mail = db.Column(db.String(255))
-    description = db.Column(db.String(500))
-    token_reset_password = db.Column(db.String(500))
+    description = db.Column(db.String(255))
+    token_reset_password = db.Column(db.String(255))
     user_picture = db.relationship('UserPicture', lazy='joined')
     comment = db.relationship('Comment', lazy='joined')
     point = db.relationship('InterestPoint', lazy='joined')

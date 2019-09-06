@@ -1,14 +1,14 @@
 from flask import g
 from src.Moderation_images.moderate_image import moderate_image
 from src.Point.Model.model_point import InterestPoint, PointPicture
-from src.User.Model.model_user import *
+from src.Configuration.session import session
 from flask_restful import reqparse
 from flask_restful import abort
 from flask_restful import Resource
 from flask_restful import marshal_with
 import flask_restful
 from cloudinary import uploader
-from src.Point.View.point_user_field import *
+from src.Point.View.point_user_field import interest_field
 import datetime
 from src.Authentification.authentification import authToken
 from src.Configuration.sight_engine import client_Sight
@@ -54,7 +54,7 @@ class Point(Resource):
                 abort(400, message="rank should be between 1 to 5")
             else:
                 poi.rank = rank
-        if visible is not None or False:
+        if visible is None or False:
             poi.visible = True
 
         if 'images' in flask_restful.request.files:

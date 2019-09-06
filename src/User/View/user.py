@@ -69,8 +69,6 @@ class Utilisateur(Resource):
                 cloudinary_struct = uploader.upload(image, public_id='{0}_{1}'.format(user.id, image.filename))
                 if not moderate_image(cloudinary_struct['url']):
                     abort(401, message="Erreur au niveau de la moderation d'image")
-                detect_properties_uri(cloudinary_struct['url'])
-
                 url = UserPicture(url=cloudinary_struct['url'], user_id=user.id)
                 user.user_picture.append(url)
         user.hash_password(password)

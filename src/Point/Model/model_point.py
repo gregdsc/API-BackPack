@@ -1,7 +1,6 @@
 from sqlalchemy import ForeignKey
 from src import db
 
-
 class InterestPoint(db.Model):
     __tablename__ = 'interest_points'
     id = db.Column(db.Integer, primary_key=True)

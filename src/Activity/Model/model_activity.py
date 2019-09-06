@@ -2,7 +2,7 @@ from src import db
 
 
 class Activity(db.Model):
-    _tablename__ = 'activity'
+    __tablename__ = 'activity'
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(255))
@@ -13,4 +13,5 @@ class Activity(db.Model):
     calorie = db.Column(db.Float)
     speed = db.Column(db.Float)
     type = db.Column(db.String(255))
+    description = db.Column(db.String(255))
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))

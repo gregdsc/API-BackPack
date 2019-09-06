@@ -8,7 +8,7 @@ def new_user():
     user = User(username='alexandre', mail='alexandre.pape@epiteche.eu')
     user.hash_password('alex')
     user.description = 'description test'
-    user.id = 1
+    user.id = 100
     return user
 
 
