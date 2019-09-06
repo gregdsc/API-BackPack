@@ -20,7 +20,6 @@ class User(db.Model):
     comment = db.relationship('Comment', lazy='joined')
     point = db.relationship('InterestPoint', lazy='joined')
     ramble = db.relationship('Ramble', lazy='joined')
-    last_seen = db.Column(db.DateTime)
 
     def hash_password(self, password):
         self.password_hash = pwd_context.encrypt(password)
