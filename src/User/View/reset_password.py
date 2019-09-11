@@ -10,22 +10,23 @@ from flask import render_template
 
 class Reset_Password(Resource):
     parser = reqparse.RequestParser()
-    parser.add_argument('email', type=str)
+    parser.add_argument('mail', type=str)
     parser.add_argument('new_password', type=str)
     parser.add_argument('new_password_confirmation', type=str)
     parser.add_argument('token', type=str)
 
     def post(self):
         parsed_args = self.parser.parse_args()
-        if session.query(User).filter(User.mail == parsed_args['email']).first() is not None:
-            user = session.query(User).filter(User.mail == parsed_args['email']).first()
+        if session.query(User).filter(User.mail == parsed_args['mail']).first() is not None:
+            user = session.query(User).filter(User.mail == parsed_args['mail']).first()
             user.token_reset_password = user.generate_reset_token()
             session.add(user)
             session.commit()
+            reset_link = "http://localhost:5000/reset_password?token=" + user.token_reset_password
             try:
                 send_mail('noreply.backpack@gmail.com', 'Reinitialiser votre mot de passe',
-                          ['gregoire.descombris@epitech.eu'], render_template("template_reset_mail.html",
-                                                                              token=user.token_reset_password))
+                          [parsed_args['mail']], render_template("template_reset_mail.html",
+                                                                              link=reset_link))
             except:
                 abort(400, message='mail non envoyé')
 
