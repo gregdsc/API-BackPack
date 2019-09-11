@@ -62,10 +62,13 @@ class Point(Resource):
             image = flask_restful.request.files['images']
             print(image)
             if image.filename != '':
-                cloudinary_struct = uploader.upload(image, public_id='{0}_{1}'.format(g.current_user.id,
+                try:
+                    cloudinary_struct = uploader.upload(image, public_id='{0}_{1}'.format(g.current_user.id,
                                                                                       image.filename))
-                if not moderate_image(cloudinary_struct['url']):
-                    abort(401, message="Erreur au niveau de la moderation d'image")
+                    if not moderate_image(cloudinary_struct['url']):
+                        abort(401, message="Erreur au niveau de la moderation d'image")
+                except:
+                    abort(401, message='failed upload file or bad file')
                 picture = PointPicture(url=cloudinary_struct['url'], point_id=poi.id)
                 poi.point_picture.append(picture)
 

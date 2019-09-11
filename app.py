@@ -16,6 +16,7 @@ from src.Comment.View.comment import UserComment, CommentPoint
 from src.Feedback.View.feedback import FeedbackUser
 from src.History.View.history import HistoriqueDate, HistoriqueRank
 from src.Prevision_images.prevision_image import PrevisionImage
+from src.Interest_place.Interest_place_PointId import Point_places
 from src import create_app
 
 import os
@@ -36,10 +37,13 @@ api.add_resource(UserPoi, '/poi_me/<string:id>', '/poi_me/<string:id>', endpoint
 
 # Poi #
 api.add_resource(Point, '/pois', '/pois/', endpoint='pois')
-api.add_resource(PointId, '/poi/<string:id>', endpoint='poi')
+api.add_resource(PointId, '/poi/<int:id_point>', endpoint='poi')
 api.add_resource(PointFiltre, '/filter/<string:type>', endpoint='filter')
 api.add_resource(PointVisibleUser, '/poi_visible/<int:id>', endpoint='poi_visible')
 
+# Poi Places #
+
+api.add_resource(Point_places, '/poi_places/<int:id_point>', endpoint='poi_places')
 
 # Token #
 api.add_resource(GetToken, '/token', endpoint='token')

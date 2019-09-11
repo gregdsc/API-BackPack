@@ -11,6 +11,7 @@ from src.User.View.user_field import user_fields
 from flask import render_template, current_app
 from src.Moderation_images.moderate_image import moderate_image
 from src.Prevision_images.propriete_image import detect_properties_uri
+
 EMAIL_REGEX = re.compile(r"[^@]+@[^@]+\.[^@]+")
 
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
@@ -39,8 +40,6 @@ class Utilisateur(Resource):
         password = parsed_args['password']
         description = parsed_args['description']
 
-
-
         if username is None or password is None or mail is None:
             abort(400, message="Missing arguments")
 
@@ -66,11 +65,14 @@ class Utilisateur(Resource):
             if len(image.filename) >= 120:
                 abort(400, message='veuillez renommer votre image, celle-ci ne doit pas dépasser 120 caractère')
             if image.filename != '':
-                cloudinary_struct = uploader.upload(image, public_id='{0}_{1}'.format(user.id, image.filename))
-                if not moderate_image(cloudinary_struct['url']):
-                    abort(401, message="Erreur au niveau de la moderation d'image")
-                url = UserPicture(url=cloudinary_struct['url'], user_id=user.id)
-                user.user_picture.append(url)
+                try:
+                    cloudinary_struct = uploader.upload(image, public_id='{0}_{1}'.format(user.id, image.filename))
+                    if not moderate_image(cloudinary_struct['url']):
+                        abort(401, message="Erreur au niveau de la moderation d'image")
+                    url = UserPicture(url=cloudinary_struct['url'], user_id=user.id)
+                    user.user_picture.append(url)
+                except:
+                    abort(401, message='erreur upload file')
         user.hash_password(password)
         session.add(user)
         session.commit()

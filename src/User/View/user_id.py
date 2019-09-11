@@ -19,10 +19,10 @@ class UtilisateurId(Resource):
     parser.add_argument('new_pic_url', type=str)
 
     @marshal_with(user_fields)
-    def get(self, id_utilisateur):
-        user = session.query(User).filter(User.id == id_utilisateur).first()
+    def get(self, id):
+        user = session.query(User).filter(User.id == id).first()
         if not user:
-            abort(404, message="user {} doesn't exist".format(id_utilisateur))
+            abort(404, message="user {} doesn't exist".format(id))
         return user
 
     @authToken.login_required
@@ -54,19 +54,25 @@ class UtilisateurId(Resource):
             if session.query(UserPicture).filter(UserPicture.user_id == user.id).first() is None:
                 images = flask_restful.request.files.getlist('image')
                 for image in images:
-                    cloudinary_struct = uploader.upload(image, public_id='{0}_{1}'.format(user.id, image.filename))
-                    url = UserPicture(user_id=user.id, url=cloudinary_struct['url'])
-                    if not moderate_image(cloudinary_struct['url']):
-                        abort(401, message="Erreur au niveau de la moderation d'image")
+                    try:
+                        cloudinary_struct = uploader.upload(image, public_id='{0}_{1}'.format(user.id, image.filename))
+                        url = UserPicture(user_id=user.id, url=cloudinary_struct['url'])
+                        if not moderate_image(cloudinary_struct['url']):
+                            abort(401, message="Erreur au niveau de la moderation d'image")
+                    except:
+                        abort(401, message='failed upload file or bad file')
                     user.user_picture.append(url)
                     if session.query(UserPicture).filter(UserPicture.url == url.url).first() is None:
                         session.add(url)
             else:
                 url = session.query(UserPicture).filter(UserPicture.user_id == user.id).first()
                 if image.filename != '':
-                    cloudinary_struct = uploader.upload(image, public_id='{0}_{1}'.format(user.id, image.filename))
-                    if not moderate_image(cloudinary_struct['url']):
-                        abort(401, message="Erreur au niveau de la moderation d'image")
+                    try:
+                        cloudinary_struct = uploader.upload(image, public_id='{0}_{1}'.format(user.id, image.filename))
+                        if not moderate_image(cloudinary_struct['url']):
+                            abort(401, message="Erreur au niveau de la moderation d'image")
+                    except:
+                        abort(401, message='failed upload file or bad file')
                     url.url = cloudinary_struct['url']
                     user.user_picture.append(url)
 

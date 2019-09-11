@@ -71,10 +71,13 @@ class PointId(Resource):
                 if session.query(InterestPoint).filter(InterestPoint.point_id == id_point).first() is None:
                     images = flask_restful.request.files.getlist('image')
                     for image in images:
-                        cloudinary_struct = uploader.upload(image, public_id='{0}_{1}'.format(g.current_user.id,
+                        try:
+                            cloudinary_struct = uploader.upload(image, public_id='{0}_{1}'.format(g.current_user.id,
                                                                                               image.filename))
-                        if not moderate_image(cloudinary_struct['url']):
-                            abort(401, message="Erreur au niveau de la moderation d'image")
+                            if not moderate_image(cloudinary_struct['url']):
+                                abort(401, message="Erreur au niveau de la moderation d'image")
+                        except:
+                            abort(401, message='failed upload file or bad file')
                         url = InterestPoint(point_id=poi.id, url=cloudinary_struct['url'])
                         poi.point_picture.append(url)
                         if session.query(InterestPoint).filter(InterestPoint.url == url.url).first() is None:
@@ -82,10 +85,13 @@ class PointId(Resource):
                 else:
                     url = session.query(InterestPoint).filter(InterestPoint.point_id == id_point).first()
                     if image.filename != '':
-                        cloudinary_struct = uploader.upload(image, public_id='{0}_{1}'.format(g.current_user.id,
+                        try:
+                            cloudinary_struct = uploader.upload(image, public_id='{0}_{1}'.format(g.current_user.id,
                                                                                               image.filename))
-                        if not moderate_image(cloudinary_struct['url']):
-                            abort(401, message="Erreur au niveau de la moderation d'image")
+                            if not moderate_image(cloudinary_struct['url']):
+                                abort(401, message="Erreur au niveau de la moderation d'image")
+                        except:
+                            abort(401, message='failed upload file or bad file')
                         url.url = cloudinary_struct['url']
                         poi.point_picture.append(url)
 

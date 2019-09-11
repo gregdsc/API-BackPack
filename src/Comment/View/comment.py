@@ -64,7 +64,7 @@ class CommentPoint(Resource):
     parser.add_argument('id', type=int)
     parser.add_argument('rank', type=int)
 
-    @marshal_with(champs)
+    @marshal_with(champs_comment)
     def get(self, id_poi):
-        comment = session.query(InterestPoint).filter(InterestPoint.id == id_poi).all()
+        comment = session.query(Comment).filter(Comment.point_id == id_poi).all()
         return comment, 201
