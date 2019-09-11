@@ -9,8 +9,8 @@ from src.Point.Model.model_point import InterestPoint
 class PointVisibleUser(Resource):
 
     @marshal_with(interest_field)
-    def get(self, id_point_user):
-        poi_visible = session.query(InterestPoint).filter(InterestPoint.user_id == id_point_user). \
+    def get(self, id):
+        poi_visible = session.query(InterestPoint).filter(InterestPoint.user_id == id). \
             filter(InterestPoint.visible == True).all()
         if not poi_visible:
             abort(401, message='No point for this user')
