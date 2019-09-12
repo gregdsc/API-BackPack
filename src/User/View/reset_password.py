@@ -29,8 +29,9 @@ class Reset_Password(Resource):
                                                                               link=reset_link))
             except:
                 abort(400, message='mail non envoyé')
-
-        return 201
+            return 201
+        else:
+            abort(400, message='le mail nexiste pas')
 
     def put(self):
         parsed_args = self.parser.parse_args()
