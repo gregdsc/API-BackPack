@@ -8,12 +8,12 @@ class Config:
     SECRET_KEY = 'I7QkQImQ6468QJkKQJ434QHJHFLSssjd'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SSL_REDIRECT = False
-    MAIL_SERVER = os.environ.get('MAIL_SERVER', 'SSL0.OVH.NET')
-    MAIL_PORT = int(os.environ.get('MAIL_PORT', '465'))
-    MAIL_USE_TLS = int(os.environ.get('MAIL_USE_TLS', False))
-    MAIL_USE_SSL = int(os.environ.get('MAIL_USE_SSL', True))
-    EMAIL_USERNAME = os.environ.get('EMAIL_USERNAME')
-    EMAIL_PASSWORD = os.environ.get('EMAIL_PASSWORD')
+    #MAIL_SERVER = os.environ.get('MAIL_SERVER', 'SSL0.OVH.NET')
+    #MAIL_PORT = int(os.environ.get('MAIL_PORT', '465'))
+    #MAIL_USE_TLS = int(os.environ.get('MAIL_USE_TLS', False))
+    #MAIL_USE_SSL = int(os.environ.get('MAIL_USE_SSL', True))
+    #EMAIL_USERNAME = os.environ.get('EMAIL_USERNAME')
+    #EMAIL_PASSWORD = os.environ.get('EMAIL_PASSWORD')
     ADMINS = ['alexandre.pape@epitech.eu']
     TEST = '[TEST]'
 
