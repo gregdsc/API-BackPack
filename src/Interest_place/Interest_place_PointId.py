@@ -12,4 +12,5 @@ class Point_places(Resource):
         #print(poi['long'])
         #print(poi['lat'])
         #print(type(place_point_POI((str(poi['long'])), str(poi['lat']))))
+        print('ok')
         return place_point_POI((str(poi['long'])), str(poi['lat']))
