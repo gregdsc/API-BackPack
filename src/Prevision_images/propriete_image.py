@@ -7,6 +7,8 @@ from google.oauth2 import service_account
 
 
 # dev / prod
+from google.protobuf.json_format import MessageToDict
+
 credentials = service_account.Credentials. from_service_account_file(r'project.json')
 
 # clients = vision.ImageAnnotatorClient(credentials=credentials)
@@ -38,33 +40,33 @@ def detect_web_uri(uri):
         print('\n{} Pages with matching images found:'.format(
             len(annotations.pages_with_matching_images)))
 
-        for page in annotations.pages_with_matching_images:
+        for page in reversed(annotations.pages_with_matching_images):
             print('\n\tPage url   : {}'.format(page.url))
             dict['page_url'] = page.url
 
-            # if page.full_matching_images:
-            #     print('\t{} Full Matches found: '.format(
-            #            len(page.full_matching_images)))
-            #     dict['page_full_matching_images'] = page.full_matching_images
-            #
-            #     for image in page.full_matching_images:
-            #         print('\t\tImage url  : {}'.format(image.url))
-            #         dict['image_url'] = image.url
-            #
-            # if page.partial_matching_images:
-            #     print('\t{} Partial Matches found: '.format(
-            #            len(page.partial_matching_images)))
-            #     dict['partial_matches_found'] = page.partial_matching_images
-            #
-            #     for image in page.partial_matching_images:
-            #         print('\t\tImage url  : {}'.format(image.url))
-            #         dict['image_url_2'] = image.url
+            if page.full_matching_images:
+                print('\t{} Full Matches found: '.format(
+                       len(page.full_matching_images)))
+                #dict['page_full_matching_images'] = page.full_matching_images
+
+                for image in page.full_matching_images:
+                    print('\t\tImage url  : {}'.format(image.url))
+                    #dict['image_url'] = image.url
+
+            if page.partial_matching_images:
+                print('\t{} Partial Matches found: '.format(
+                       len(page.partial_matching_images)))
+                #dict['partial_matches_found'] = page.partial_matching_images
+
+                for image in reversed(page.partial_matching_images):
+                    print('\t\tImage url  : {}'.format(image.url))
+                    dict['image_url_2'] = image.url
 
     if annotations.web_entities:
         print('\n{} Web entities found: '.format(
             len(annotations.web_entities)))
 
-        for entity in annotations.web_entities:
+        for entity in reversed(annotations.web_entities):
             print('\n\tScore      : {}'.format(entity.score))
             print(u'\tDescription: {}'.format(entity.description))
             dict['Score'] = entity.score
@@ -74,9 +76,9 @@ def detect_web_uri(uri):
         print('\n{} visually similar images found:\n'.format(
             len(annotations.visually_similar_images)))
 
-        # for image in annotations.visually_similar_images:
-        #     print('\tImage url    : {}'.format(image.url))
-        #     dict['image_similar'] = image.url
+        for image in reversed(annotations.visually_similar_images):
+            print('\tImage url    : {}'.format(image.url))
+            dict['image_similar'] = image.url
 
     return dict
 

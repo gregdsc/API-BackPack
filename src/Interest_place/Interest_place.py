@@ -17,8 +17,7 @@ def place_point_POI(longitude, latitude):
             result_detail = gmaps.place(place_id=id_place)
             adresse = result_detail['result']
             place_point['street'] = adresse['formatted_address']
-            # print(result_detail['rating'])
-            # place_point['rating'] = adresse['rating']
+
             place_point['website'] = adresse['website']
             place_point['name'] = place_p['name']
 
@@ -33,6 +32,10 @@ def place_point_POI(longitude, latitude):
                   + "&maxheight=500"
 
             place_point['url_photo'] = url
+
+            for key, value in adresse.items():
+                if key == 'rating':
+                    place_point['rating'] = value
 
             dest = place_point
             dict.append(dest)

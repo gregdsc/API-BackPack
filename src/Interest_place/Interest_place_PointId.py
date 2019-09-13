@@ -9,7 +9,7 @@ from src.Interest_place.Interest_place import place_point_POI
 class Point_places(Resource):
     def get(self, id_point):
         poi = PointId.get(self, id_point)
-        print(poi['long'])
-        print(poi['lat'])
-        print(type(place_point_POI((str(poi['long'])), str(poi['lat']))))
+        #print(poi['long'])
+        #print(poi['lat'])
+        #print(type(place_point_POI((str(poi['long'])), str(poi['lat']))))
         return place_point_POI((str(poi['long'])), str(poi['lat']))
