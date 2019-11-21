@@ -34,7 +34,7 @@ def detect_web_uri(uri):
     if annotations.best_guess_labels:
         for label in annotations.best_guess_labels:
             print('\nBest guess label: {}'.format(label.label))
-            dict['best guess label'] = label.label
+            dict['best_guess_label'] = label.label
 
     if annotations.pages_with_matching_images:
         print('\n{} Pages with matching images found:'.format(
