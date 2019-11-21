@@ -17,7 +17,7 @@ from src.Feedback.View.feedback import FeedbackUser
 from src.History.View.history import HistoriqueDate, HistoriqueRank
 from src.Prevision_images.prevision_image import PrevisionImage
 from src.Interest_place.Interest_place_PointId import Point_places
-from src.Sms.Sms import Envoi_sms
+
 from src import create_app
 
 import os
@@ -68,9 +68,6 @@ api.add_resource(CommentPoint, '/comment/point_interet/<int:id_poi>', endpoint='
 
 api.add_resource(FeedbackUser, '/feedback', '/feedback/', endpoint='feedback')
 
-# SMS #
-
-api.add_resource(Envoi_sms, '/test_sms', '/test_sms/', endpoint='test_sms')
 
 # History
 

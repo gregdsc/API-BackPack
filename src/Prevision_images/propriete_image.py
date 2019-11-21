@@ -9,7 +9,7 @@ from google.oauth2 import service_account
 # dev / prod
 from google.protobuf.json_format import MessageToDict
 
-credentials = service_account.Credentials. from_service_account_file(r'project.json')
+credentials = service_account.Credentials.from_service_account_file(r'project.json')
 
 # clients = vision.ImageAnnotatorClient(credentials=credentials)
 
