@@ -5,7 +5,7 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 
 
 class Config:
-    SECRET_KEY = 'I7QkQImQ6468QJkKQJ434QHJHFLSssjd'
+    SECRET_KEY = 'I7QkQImQ6468QJkKQJ434QHJHFLSssjd' # var env
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SSL_REDIRECT = False
     #MAIL_SERVER = os.environ.get('MAIL_SERVER', 'SSL0.OVH.NET')

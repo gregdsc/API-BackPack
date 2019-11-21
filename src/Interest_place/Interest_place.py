@@ -32,7 +32,6 @@ def place_point_POI(longitude, latitude):
                   + "&maxheight=500"
 
             place_point['url_photo'] = url
-
             for key, value in adresse.items():
                 if key == 'rating':
                     place_point['rating'] = value

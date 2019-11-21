@@ -22,6 +22,7 @@ class PrevisionImage(Resource):
         mail = parsed_args['mail']
         password = parsed_args['password']
         description = parsed_args['description']
+        dict = {}
 
         if 'image' in request.files:
             image = request.files['image']

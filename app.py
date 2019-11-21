@@ -72,7 +72,6 @@ api.add_resource(FeedbackUser, '/feedback', '/feedback/', endpoint='feedback')
 api.add_resource(HistoriqueDate, '/history/date', endpoint='date')
 api.add_resource(HistoriqueRank, '/history/rank', endpoint='rank')
 
-
 # Prevision
 
 api.add_resource(PrevisionImage, '/prevision', '/prevision/', endpoint='prevision')
