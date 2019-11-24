@@ -25,6 +25,7 @@ class RambleRessource(Resource):
         difficulty = parsed_args['difficulty']
         travel_time = parsed_args['travel time']
         point = parsed_args['point']
+        visible = parsed_args['visible']
 
         username_ramble = session.query(Ramble).filter(Ramble.user_id == g.current_user.id).first()
         name_ramble = session.query(Ramble).filter(Ramble.name == name).first()
@@ -35,9 +36,9 @@ class RambleRessource(Resource):
             if name_ramble:
                 abort(404, message="Vous avez déjà une randonnée du même nom")
         if difficulty < 0 or difficulty > 5 and type(difficulty) == int:
-            abort(404, message="la difficulté ne peux aller que de 1 à 5 et doit être un int")
+            abort(404, message="la difficulté ne peux aller que de 1 à 5")
         n = Ramble(name=name, username=g.current_user.username, user_id=g.current_user.id, difficulty=difficulty,
-                   travel_time=travel_time, step_number=step, date_ramble=date_n)
+                   travel_time=travel_time, step_number=step, date_ramble=date_n, visible=True)
         for k, id_point in point.items():
             point = RambleDetail(ramble_id=n.id, point_id=id_point, ordre=k)
             n.ramble_detail.append(point)

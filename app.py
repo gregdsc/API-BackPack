@@ -17,6 +17,7 @@ from src.Feedback.View.feedback import FeedbackUser
 from src.History.View.history import HistoriqueDate, HistoriqueRank
 from src.Prevision_images.prevision_image import PrevisionImage
 from src.Interest_place.Interest_place_PointId import Point_places
+from src.Ramble.View.ramble_visible_user import RambleVisibleUser
 
 from src import create_app
 
@@ -52,6 +53,7 @@ api.add_resource(GetToken, '/token', endpoint='token')
 
 # Ramble #
 api.add_resource(RambleRessource, '/ramble', '/ramble/', endpoint='ramble')
+api.add_resource(RambleVisibleUser, '/ramble_visible/<int:id>', endpoint='ramble_visible')
 
 # Ramble ID #
 
