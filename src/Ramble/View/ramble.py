@@ -32,13 +32,16 @@ class RambleRessource(Resource):
         date_n = datetime.datetime.now()
         step = len(point)
 
+
         if username_ramble:
             if name_ramble:
                 abort(404, message="Vous avez déjà une randonnée du même nom")
         if difficulty < 0 or difficulty > 5 and type(difficulty) == int:
             abort(404, message="la difficulté ne peux aller que de 1 à 5")
         n = Ramble(name=name, username=g.current_user.username, user_id=g.current_user.id, difficulty=difficulty,
-                   travel_time=travel_time, step_number=step, date_ramble=date_n, visible=True)
+                   travel_time=travel_time, step_number=step, date_ramble=date_n)
+        if visible is None or False:
+            n.visible = True
         for k, id_point in point.items():
             point = RambleDetail(ramble_id=n.id, point_id=id_point, ordre=k)
             n.ramble_detail.append(point)
