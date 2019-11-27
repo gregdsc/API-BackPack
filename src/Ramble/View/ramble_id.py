@@ -1,6 +1,6 @@
 from flask import g
 from src.Ramble.Model.model_ramble import Ramble, RambleDetail
-from flask_restful import reqparse, abort
+from flask_restful import reqparse
 from flask_restful import Resource
 from flask_restful import marshal_with
 from src.Ramble.View.ramble_fields import ramble
@@ -35,11 +35,6 @@ class RambleId(Resource):
     @authToken.login_required
     def delete(self, id):
         ramble = session.query(Ramble).filter(Ramble.id == id).first()
-        if ramble.user_id == g.current_user.id:
-            if not ramble:
-                abort(404, message="poi {} doesn't exist".format(id))
-            session.delete(ramble)
-            session.commit()
-        else:
-            abort(400, message="This point isn't yours")
-        return {}, 204
+        session.delete(ramble)
+        session.commit()
+        return 201

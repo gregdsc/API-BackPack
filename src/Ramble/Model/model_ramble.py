@@ -18,7 +18,7 @@ class Ramble(db.Model):
     step_number = db.Column(db.Float)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     tag_id = db.Column(db.Integer, db.ForeignKey('tags.id'))
-    ramble_detail = db.relationship('RambleDetail', lazy='joined')
+    ramble_detail = db.relationship('RambleDetail', lazy='joined', cascade="all,delete")
     point = db.relationship('InterestPoint', secondary='ramble_details', lazy='joined')
     tag = db.relationship('Tag', secondary='ramble_tag_association')
     visible = db.Column(db.Boolean)
