@@ -33,11 +33,11 @@ class RambleId(Resource):
         return rando
 
     @authToken.login_required
-    def delete(self, id_ramble):
-        ramble = session.query(Ramble).filter(Ramble.id == id_ramble).first()
+    def delete(self, id):
+        ramble = session.query(Ramble).filter(Ramble.id == id).first()
         if ramble.user_id == g.current_user.id:
             if not ramble:
-                abort(404, message="poi {} doesn't exist".format(id_ramble))
+                abort(404, message="poi {} doesn't exist".format(id))
             session.delete(ramble)
             session.commit()
         else:
