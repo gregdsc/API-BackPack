@@ -1,3 +1,6 @@
+import datetime
+import sched, time
+
 from flask import g
 from flask_httpauth import HTTPBasicAuth, HTTPTokenAuth
 from src.User.Model.model_user import User
@@ -13,6 +16,10 @@ def verify_password(mail, password):
     if not user or not user.verify_password(password):
         return False
     g.current_user = user
+    user.derniere_connexion = datetime.datetime.now()
+    session.add(user)
+    session.commit()
+    s = sched.scheduler(time.time())
     return True
 
 

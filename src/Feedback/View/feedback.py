@@ -32,7 +32,7 @@ class FeedbackUser(Resource):
             session.commit()
             try:
                 send_mail('noreply.backpack@gmail.com', 'Nouveau Feedback',
-                          ['gregoire.descombris@epitech.eu'], render_template("template_feedback.html",
+                          [g.current_user.mail], render_template("template_feedback.html",
                                                                               user_name=feedback.username,
                                                                               mark=feedback.mark,
                                                                               details=feedback.details))
