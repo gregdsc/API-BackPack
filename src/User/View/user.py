@@ -7,6 +7,7 @@ from flask_restful import request
 from cloudinary import uploader
 import re
 from src.Email.send_email import send_mail
+from src.Email.send_sms import send_sms
 from src.User.View.user_field import user_fields
 from flask import render_template, current_app
 from src.Moderation_images.moderate_image import moderate_image
@@ -22,6 +23,7 @@ class Utilisateur(Resource):
     parser.add_argument('username', type=str)
     parser.add_argument('password', type=str)
     parser.add_argument('mail', type=str)
+    parser.add_argument('phone', type=str)
     parser.add_argument('description', type=str)
     parser.add_argument('pic_url', type=str)
 
@@ -37,6 +39,7 @@ class Utilisateur(Resource):
         parsed_args = self.parser.parse_args()
         username = parsed_args['username']
         mail = parsed_args['mail']
+        phone = parsed_args['phone']
         password = parsed_args['password']
         description = parsed_args['description']
 
@@ -49,7 +52,6 @@ class Utilisateur(Resource):
             abort(400, message="your username must contain at least 3 letters")
         if username == password:
             abort(400, message="Your password, must be different from your username")
-
         if session.query(User).filter(User.mail == mail).first() is not None:
             abort(400, message="User {} already exists".format(mail))
 
@@ -59,6 +61,9 @@ class Utilisateur(Resource):
 
         if description is not None:
             user.description = description
+
+        if phone is not None:
+            user.phone = phone
 
         if 'image' in request.files:
             image = request.files['image']
@@ -78,4 +83,5 @@ class Utilisateur(Resource):
         session.commit()
         send_mail('noreply.backpack@gmail.com', 'Inscription Backpack',
                   [user.mail], render_template('template_test.html'))
+        send_sms('votre compte a ete cree avec succes ! Vous pouvez maitenant vous connecter avec vos identifiants : '+mail+', mot de passe : '+password+', ne les perdez pas!', phone)
         return user, 201
