@@ -16,6 +16,7 @@ class RambleRessource(Resource):
     parser.add_argument('point', type=dict)
     parser.add_argument('difficulty', type=int)
     parser.add_argument('travel time', type=float)
+    parser.add_argument('visible', type=bool)
 
     @authToken.login_required
     @marshal_with(ramble_all)
