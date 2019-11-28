@@ -14,9 +14,13 @@ class Ramble(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     ramble_detail = db.relationship('RambleDetail', lazy='joined', cascade="all,delete")
     point = db.relationship('InterestPoint', secondary='ramble_details', lazy='joined')
-    tag = db.Column(db.String(255))
     visible = db.Column(db.Boolean)
 
+class Tag(db.Model):
+    __tablename__ = 'tags'
+    __table_args__ = {'extend_existing': True}
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(255))
 
 class RambleDetail(db.Model):
     __tablename__ = 'ramble_details'
