@@ -17,6 +17,7 @@ class RambleRessource(Resource):
     parser.add_argument('difficulty', type=int)
     parser.add_argument('travel time', type=float)
     parser.add_argument('visible', type=bool)
+    parser.add_argument('tag', type=str)
 
     @authToken.login_required
     @marshal_with(ramble_all)
@@ -27,6 +28,7 @@ class RambleRessource(Resource):
         travel_time = parsed_args['travel time']
         point = parsed_args['point']
         visible = parsed_args['visible']
+        tag = parsed_args['tag']
 
         username_ramble = session.query(Ramble).filter(Ramble.user_id == g.current_user.id).first()
         name_ramble = session.query(Ramble).filter(Ramble.name == name).first()
@@ -40,7 +42,7 @@ class RambleRessource(Resource):
         if difficulty < 0 or difficulty > 5 and type(difficulty) == int:
             abort(404, message="la difficulté ne peux aller que de 1 à 5")
         n = Ramble(name=name, username=g.current_user.username, user_id=g.current_user.id, difficulty=difficulty,
-                   travel_time=travel_time, step_number=step, date_ramble=date_n)
+                   travel_time=travel_time, step_number=step, date_ramble=date_n, tag=tag)
         if visible is None or False:
             n.visible = True
         for k, id_point in point.items():

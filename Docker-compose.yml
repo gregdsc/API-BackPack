@@ -69,6 +69,5 @@ services:
     env_file: docker/flask/flask.env
     depends_on:
       - nginx
-    tty: true
     command: python -m pytest -ra -p no:cacheprovider tests/unitaire
-
+    tty: true
