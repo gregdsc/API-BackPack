@@ -18,7 +18,7 @@ from src.History.View.history import HistoriqueDate, HistoriqueRank
 from src.Prevision_images.prevision_image import PrevisionImage
 from src.Interest_place.Interest_place_PointId import Point_places
 from src.Ramble.View.ramble_visible_user import RambleVisibleUser
-from src.Equipment.equipement import EquipmentRessource
+
 
 from src import create_app
 
@@ -82,8 +82,6 @@ api.add_resource(HistoriqueRank, '/history/rank', endpoint='rank')
 api.add_resource(PrevisionImage, '/prevision', '/prevision/', endpoint='prevision')
 
 # Equipment
-
-api.add_resource(EquipmentRessource, '/equipment/<int:id>', endpoint='equipment')
 
 app = create_app(os.getenv('FLASK_CONFIG'))
 
