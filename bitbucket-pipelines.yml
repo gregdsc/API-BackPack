@@ -24,7 +24,7 @@ pipelines:
           name: Deploy to Heroku
           deployment: production   # set to test, staging or production
           script:
-            - git push https://heroku:$API_KEY_HEROKU@git.heroku.com/$HEROKU_APP_NAME.git
+            - git push https://heroku:a1fa8b26-9947-4ddf-b6a2-58d6c113dbbc@git.heroku.com/backpack-developement.git HEAD:master
        - step:
           name: Testing fonctional
           image:
