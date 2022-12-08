@@ -1,7 +1,7 @@
 alembic==0.9.8
 aniso8601==2.0.1
 astroid==1.6.1
-certifi==2018.1.18
+certifi==2022.12.7
 click==6.7
 cloudinary==1.11.0
 Flask==0.12.2
